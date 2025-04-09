@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, ShoppingCart } from "lucide-react";
+import { Heart, ShoppingCart, IndianRupee } from "lucide-react";
 import { toast } from "sonner";
 
 export interface Product {
@@ -142,15 +142,24 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className="flex justify-between items-center text-sm font-medium">
           <div className="flex flex-col">
             <span className="text-muted-foreground">Daily</span>
-            <span className="text-foreground">${product.dailyPrice}</span>
+            <span className="text-foreground flex items-center">
+              <IndianRupee className="h-3 w-3 mr-1" />
+              {product.dailyPrice}
+            </span>
           </div>
           <div className="flex flex-col">
             <span className="text-muted-foreground">Weekly</span>
-            <span className="text-foreground">${product.weeklyPrice}</span>
+            <span className="text-foreground flex items-center">
+              <IndianRupee className="h-3 w-3 mr-1" />
+              {product.weeklyPrice}
+            </span>
           </div>
           <div className="flex flex-col">
             <span className="text-muted-foreground">Monthly</span>
-            <span className="text-foreground">${product.monthlyPrice}</span>
+            <span className="text-foreground flex items-center">
+              <IndianRupee className="h-3 w-3 mr-1" />
+              {product.monthlyPrice}
+            </span>
           </div>
         </div>
       </CardContent>

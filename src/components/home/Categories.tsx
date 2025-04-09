@@ -56,10 +56,10 @@ const Categories = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((category) => (
-            <Link to={`/category/${category.id}`} key={category.id}>
-              <Card className="h-full transition-all hover:shadow-md hover:border-primary/50">
+            <Link to={`/products?category=${category.id}`} key={category.id}>
+              <Card className="h-full transition-all hover:shadow-md hover:border-primary/50 hover:scale-105 duration-300">
                 <CardContent className="p-6 flex flex-col items-center text-center">
-                  <div className="text-4xl mb-4">{category.icon}</div>
+                  <div className="text-4xl mb-4 animate-bounce">{category.icon}</div>
                   <h3 className="text-xl font-medium mb-2">{category.name}</h3>
                   <p className="text-muted-foreground text-sm">
                     {category.description}

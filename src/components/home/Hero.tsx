@@ -33,15 +33,15 @@ const Hero = () => {
       </div>
 
       <div className="mx-auto max-w-3xl text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl">
+        <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl animate-fade-in">
           <span className="text-primary">love it</span>..
           <span className="text-accent">rent it</span>
         </h1>
-        <p className="mt-6 text-lg leading-8 text-muted-foreground">
+        <p className="mt-6 text-lg leading-8 text-muted-foreground animate-fade-in" style={{ animationDelay: "0.2s" }}>
           Rent high-quality products at affordable prices. Why buy when you can
           BucketIt? Choose from thousands of electronics, furniture, and more.
         </p>
-        <div className="mt-10 flex items-center justify-center gap-x-6">
+        <div className="mt-10 flex items-center justify-center gap-x-6 animate-fade-in" style={{ animationDelay: "0.4s" }}>
           <form onSubmit={handleSearch} className="w-full max-w-md">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -63,31 +63,31 @@ const Hero = () => {
             </div>
           </form>
         </div>
-        <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm text-muted-foreground">
+        <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm text-muted-foreground animate-fade-in" style={{ animationDelay: "0.6s" }}>
           <span>Popular:</span>
           <button 
-            onClick={() => navigate("/category/electronics")}
+            onClick={() => navigate("/products?category=electronics")}
             className="hover:text-primary transition-colors"
           >
             Electronics
           </button>
           <span>•</span>
           <button 
-            onClick={() => navigate("/category/furniture")}
+            onClick={() => navigate("/products?category=furniture")}
             className="hover:text-primary transition-colors"
           >
             Furniture
           </button>
           <span>•</span>
           <button 
-            onClick={() => navigate("/category/cameras")}
+            onClick={() => navigate("/products?category=appliances")}
             className="hover:text-primary transition-colors"
           >
-            Cameras
+            Appliances
           </button>
           <span>•</span>
           <button 
-            onClick={() => navigate("/category/tools")}
+            onClick={() => navigate("/products?category=tools")}
             className="hover:text-primary transition-colors"
           >
             Tools
