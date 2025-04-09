@@ -32,6 +32,20 @@ const OrderHistory = () => {
     if (savedOrders) {
       setOrders(JSON.parse(savedOrders));
     }
+    
+    // Listen for storage events to update orders when they change
+    const handleStorageChange = () => {
+      const updatedOrders = JSON.parse(localStorage.getItem("bucketit_orders") || "[]");
+      setOrders(updatedOrders);
+    };
+    
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("bucketit_storage_update", handleStorageChange);
+    
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("bucketit_storage_update", handleStorageChange);
+    };
   }, []);
 
   const getStatusColor = (status: Order["status"]) => {
@@ -45,6 +59,16 @@ const OrderHistory = () => {
       default:
         return "";
     }
+  };
+
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    }).format(date);
   };
 
   return (
@@ -86,10 +110,10 @@ const OrderHistory = () => {
                   {orders.map((order) => (
                     <TableRow key={order.id}>
                       <TableCell className="font-medium">{order.id}</TableCell>
-                      <TableCell>{order.date}</TableCell>
+                      <TableCell>{formatDate(order.date)}</TableCell>
                       <TableCell>
                         <div className="flex -space-x-2">
-                          {order.items.map((item) => (
+                          {order.items.slice(0, 3).map((item) => (
                             <img
                               key={item.id}
                               src={item.image}

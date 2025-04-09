@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,37 +16,70 @@ const Checkout = () => {
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
+  const [cartSummary, setCartSummary] = useState({
+    items: [],
+    subtotal: 0,
+    tax: 0,
+    total: 0
+  });
   
-  // Sample cart summary data
-  const cartSummary = {
-    items: [
-      {
-        id: 1,
-        name: "MacBook Pro 16\" M1 Pro",
-        price: 25,
-        duration: "daily",
-        quantity: 1
-      },
-      {
-        id: 3,
-        name: "Modern Lounge Chair",
-        price: 45,
-        duration: "weekly",
-        quantity: 1
-      }
-    ],
-    subtotal: 70,
-    tax: 5.60,
-    total: 75.60
-  };
+  // Load cart items from localStorage on component mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem("bucketit_cart");
+    if (savedCart) {
+      const items = JSON.parse(savedCart);
+      setCartItems(items);
+      
+      // Calculate totals
+      const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const tax = subtotal * 0.08;
+      const total = subtotal + tax;
+      
+      setCartSummary({
+        items,
+        subtotal,
+        tax,
+        total
+      });
+    }
+  }, []);
 
   const handlePlaceOrder = () => {
     setIsProcessing(true);
+    
+    // Generate a unique order ID
+    const orderId = `ORD-${Date.now().toString().slice(-6)}`;
+    
+    // Create a new order object
+    const newOrder = {
+      id: orderId,
+      date: new Date().toISOString(),
+      items: cartItems,
+      total: cartSummary.total,
+      status: "active"
+    };
+    
+    // Get existing orders or initialize empty array
+    const existingOrders = JSON.parse(localStorage.getItem("bucketit_orders") || "[]");
+    
+    // Add the new order to the orders array
+    const updatedOrders = [newOrder, ...existingOrders];
+    
+    // Store in localStorage
+    localStorage.setItem("bucketit_orders", JSON.stringify(updatedOrders));
+    
+    // Clear the cart
+    localStorage.setItem("bucketit_cart", JSON.stringify([]));
     
     // Simulate API call
     setTimeout(() => {
       setIsProcessing(false);
       toast.success("Order placed successfully!");
+      
+      // Dispatch custom event to notify other components of the change
+      window.dispatchEvent(new Event("bucketit_storage_update"));
+      
       navigate("/order-history");
     }, 2000);
   };

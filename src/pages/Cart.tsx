@@ -82,7 +82,8 @@ const Cart = () => {
     navigate("/checkout");
   };
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  // Calculate totals from actual cart items
+  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const tax = subtotal * 0.08;
   const total = subtotal + tax;
 
@@ -154,7 +155,7 @@ const Cart = () => {
                             </Select>
                           </TableCell>
                           <TableCell className="text-right font-medium">
-                            ${item.price * item.quantity}
+                            ${(item.price * item.quantity).toFixed(2)}
                           </TableCell>
                           <TableCell>
                             <Button
