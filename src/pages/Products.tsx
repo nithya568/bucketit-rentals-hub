@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
@@ -9,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search } from "lucide-react";
+import AvailabilityToggle from "@/components/filters/AvailabilityToggle";
 
 // Sample products data with high-quality images - expanded to have at least 10 per category
 const sampleProducts: Product[] = [
@@ -638,7 +638,7 @@ const Products = () => {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [showOnlyAvailable, setShowOnlyAvailable] = useState(true);
+  const [showOnlyAvailable, setShowOnlyAvailable] = useState(false);
   const [sortOption, setSortOption] = useState("relevance");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -680,7 +680,7 @@ const Products = () => {
       );
     }
     
-    // Filter by availability
+    // Filter by availability only if the toggle is on
     if (showOnlyAvailable) {
       result = result.filter((product) => product.available !== false);
     }
@@ -708,6 +708,10 @@ const Products = () => {
         ? [...prev, category]
         : prev.filter((cat) => cat !== category)
     );
+  };
+
+  const handleAvailabilityChange = (value: boolean) => {
+    setShowOnlyAvailable(value);
   };
 
   return (
@@ -741,21 +745,11 @@ const Products = () => {
               </div>
             </div>
 
-            <div className="bg-background p-4 rounded-md border hover:shadow-md transition-all duration-300">
-              <h3 className="font-semibold mb-3">Availability</h3>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="available"
-                  checked={showOnlyAvailable}
-                  onCheckedChange={(checked) =>
-                    setShowOnlyAvailable(checked === true)
-                  }
-                />
-                <Label htmlFor="available" className="cursor-pointer">
-                  Show only available items
-                </Label>
-              </div>
-            </div>
+            {/* Replaced checkbox with custom toggle component */}
+            <AvailabilityToggle 
+              showOnlyAvailable={showOnlyAvailable}
+              onChange={handleAvailabilityChange}
+            />
           </div>
 
           {/* Main Content */}
@@ -803,6 +797,7 @@ const Products = () => {
             {/* Results Information */}
             <p className="text-muted-foreground mb-4">
               Showing {filteredProducts.length} results
+              {showOnlyAvailable ? " (available items only)" : " (all items)"}
             </p>
 
             {/* Products Grid */}
@@ -838,9 +833,27 @@ const Products = () => {
             ) : (
               <div className="text-center py-12 bg-muted/30 rounded-lg animate-fade-in">
                 <h3 className="text-xl font-medium mb-2">No products found</h3>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground mb-4">
                   Try adjusting your search or filter criteria
                 </p>
+                {showOnlyAvailable && (
+                  <Button 
+                    onClick={() => setShowOnlyAvailable(false)}
+                    variant="outline"
+                    className="mr-2 hover:bg-primary/10 transition-colors"
+                  >
+                    Show all items
+                  </Button>
+                )}
+                {searchQuery && (
+                  <Button 
+                    onClick={() => setSearchQuery("")}
+                    variant="outline"
+                    className="hover:bg-primary/10 transition-colors"
+                  >
+                    Clear Search
+                  </Button>
+                )}
               </div>
             )}
           </div>

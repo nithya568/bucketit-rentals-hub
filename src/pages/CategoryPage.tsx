@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
@@ -7,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search } from "lucide-react";
+import AvailabilityToggle from "@/components/filters/AvailabilityToggle";
 
 // Sample products data (In a real app, this would come from an API)
 const sampleProducts: Product[] = [
@@ -316,6 +316,7 @@ const CategoryPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("relevance");
+  const [showOnlyAvailable, setShowOnlyAvailable] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -339,12 +340,17 @@ const CategoryPage = () => {
     // In a real app, this would trigger an API call with the search query
   };
 
-  // Filter products based on search query
-  const filteredProducts = products.filter(
-    (product) =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter products based on search query and availability
+  const filteredProducts = products.filter(product => {
+    // Filter by search query
+    const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          product.description.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // Filter by availability only if the toggle is on
+    const isAvailable = showOnlyAvailable ? product.available !== false : true;
+    
+    return matchesSearch && isAvailable;
+  });
 
   // Sort products based on selected option
   const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -356,6 +362,10 @@ const CategoryPage = () => {
     // Default: relevance (no change)
     return 0;
   });
+
+  const handleAvailabilityChange = (value: boolean) => {
+    setShowOnlyAvailable(value);
+  };
 
   if (!category) {
     return (
@@ -397,9 +407,9 @@ const CategoryPage = () => {
       </div>
 
       <div className="container mx-auto py-8 px-4">
-        {/* Search and Sort Bar */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <form onSubmit={handleSearch} className="flex-1">
+        {/* Search, Sort, and Filter Bar */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <form onSubmit={handleSearch} className="md:col-span-2">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <Search className="h-4 w-4 text-muted-foreground" />
@@ -420,26 +430,37 @@ const CategoryPage = () => {
             </div>
           </form>
 
-          <div className="w-full sm:w-48">
-            <Select
-              value={sortOption}
-              onValueChange={(value) => setSortOption(value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="relevance">Relevance</SelectItem>
-                <SelectItem value="priceLowToHigh">Price: Low to High</SelectItem>
-                <SelectItem value="priceHighToLow">Price: High to Low</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="flex space-x-2">
+            <div className="w-full">
+              <Select
+                value={sortOption}
+                onValueChange={(value) => setSortOption(value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="relevance">Relevance</SelectItem>
+                  <SelectItem value="priceLowToHigh">Price: Low to High</SelectItem>
+                  <SelectItem value="priceHighToLow">Price: High to Low</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+        </div>
+
+        {/* Availability Toggle */}
+        <div className="mb-6">
+          <AvailabilityToggle 
+            showOnlyAvailable={showOnlyAvailable}
+            onChange={handleAvailabilityChange}
+          />
         </div>
 
         {/* Results Information */}
         <p className="text-muted-foreground mb-4">
           Showing {sortedProducts.length} results in {category.title}
+          {showOnlyAvailable ? " (available items only)" : " (all items)"}
         </p>
 
         {/* Products Grid with animation */}
@@ -478,13 +499,24 @@ const CategoryPage = () => {
             <p className="text-muted-foreground mb-6">
               We couldn't find any products matching your criteria
             </p>
-            <Button 
-              onClick={() => setSearchQuery("")}
-              variant="outline"
-              className="hover:bg-primary/10 transition-colors"
-            >
-              Clear Search
-            </Button>
+            {showOnlyAvailable && (
+              <Button 
+                onClick={() => setShowOnlyAvailable(false)}
+                variant="outline"
+                className="mr-2 hover:bg-primary/10 transition-colors"
+              >
+                Show all items
+              </Button>
+            )}
+            {searchQuery && (
+              <Button 
+                onClick={() => setSearchQuery("")}
+                variant="outline"
+                className="hover:bg-primary/10 transition-colors"
+              >
+                Clear Search
+              </Button>
+            )}
           </div>
         )}
       </div>
