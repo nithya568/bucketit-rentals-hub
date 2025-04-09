@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, ShoppingCart } from "lucide-react";
+import { Heart, ShoppingCart, IndianRupee } from "lucide-react";
 import { toast } from "sonner";
 
 // Sample featured products data with better images
@@ -14,9 +14,9 @@ const featuredProducts = [
     image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
     description: "Latest model with 16GB RAM and 512GB SSD",
     category: "electronics",
-    dailyPrice: 25,
-    weeklyPrice: 149,
-    monthlyPrice: 499,
+    dailyPrice: 1999,
+    weeklyPrice: 10999,
+    monthlyPrice: 39999,
   },
   {
     id: 2,
@@ -24,9 +24,9 @@ const featuredProducts = [
     image: "https://images.unsplash.com/photo-1516724562728-afc824a36e84?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80",
     description: "Full-frame mirrorless camera with 24.2MP",
     category: "electronics",
-    dailyPrice: 20,
-    weeklyPrice: 120,
-    monthlyPrice: 399,
+    dailyPrice: 1499,
+    weeklyPrice: 8999,
+    monthlyPrice: 29999,
   },
   {
     id: 3,
@@ -34,9 +34,9 @@ const featuredProducts = [
     image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1916&q=80",
     description: "Comfortable stylish chair for your living room",
     category: "furniture",
-    dailyPrice: 8,
-    weeklyPrice: 45,
-    monthlyPrice: 150,
+    dailyPrice: 599,
+    weeklyPrice: 3499,
+    monthlyPrice: 11999,
   },
   {
     id: 4,
@@ -44,9 +44,9 @@ const featuredProducts = [
     image: "https://images.unsplash.com/photo-1563754357749-4a981a6ef2cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
     description: "Professional 18V cordless drill with accessories",
     category: "tools",
-    dailyPrice: 7,
-    weeklyPrice: 39,
-    monthlyPrice: 129,
+    dailyPrice: 499,
+    weeklyPrice: 2999,
+    monthlyPrice: 9999,
   },
 ];
 
@@ -110,10 +110,10 @@ const FeaturedProducts = () => {
   };
 
   return (
-    <section className="py-12">
+    <section className="py-12 bg-gradient-to-b from-background to-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold mb-4">Featured Items</h2>
+          <h2 className="text-3xl font-bold mb-4 text-gradient-primary">Featured Items</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Check out our most popular rental items. Quality products at
             affordable rental prices.
@@ -124,7 +124,7 @@ const FeaturedProducts = () => {
           {featuredProducts.map((product) => (
             <Card
               key={product.id}
-              className="overflow-hidden hover:shadow-md transition-shadow"
+              className="overflow-hidden hover:shadow-md transition-shadow hover:border-primary/30 hover:translate-y-[-5px] duration-300"
             >
               <div className="aspect-video relative overflow-hidden">
                 <img
@@ -139,7 +139,7 @@ const FeaturedProducts = () => {
                   <Button 
                     size="icon" 
                     variant="secondary" 
-                    className="rounded-full h-8 w-8 opacity-80 hover:opacity-100"
+                    className="rounded-full h-8 w-8 opacity-80 hover:opacity-100 hover:bg-primary hover:text-white"
                     onClick={() => addToWishlist(product)}
                   >
                     <Heart className="h-4 w-4" />
@@ -147,7 +147,7 @@ const FeaturedProducts = () => {
                   <Button 
                     size="icon" 
                     variant="secondary" 
-                    className="rounded-full h-8 w-8 opacity-80 hover:opacity-100"
+                    className="rounded-full h-8 w-8 opacity-80 hover:opacity-100 hover:bg-primary hover:text-white"
                     onClick={() => addToCart(product)}
                   >
                     <ShoppingCart className="h-4 w-4" />
@@ -174,20 +174,29 @@ const FeaturedProducts = () => {
                 <div className="flex justify-between items-center text-sm font-medium">
                   <div className="flex flex-col">
                     <span className="text-muted-foreground">Daily</span>
-                    <span className="text-foreground">${product.dailyPrice}</span>
+                    <span className="text-foreground flex items-center">
+                      <IndianRupee className="h-3 w-3 mr-1" />
+                      {product.dailyPrice}
+                    </span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-muted-foreground">Weekly</span>
-                    <span className="text-foreground">${product.weeklyPrice}</span>
+                    <span className="text-foreground flex items-center">
+                      <IndianRupee className="h-3 w-3 mr-1" />
+                      {product.weeklyPrice}
+                    </span>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-muted-foreground">Monthly</span>
-                    <span className="text-foreground">${product.monthlyPrice}</span>
+                    <span className="text-foreground flex items-center">
+                      <IndianRupee className="h-3 w-3 mr-1" />
+                      {product.monthlyPrice}
+                    </span>
                   </div>
                 </div>
               </CardContent>
               <CardFooter className="p-4 pt-0">
-                <Button asChild className="w-full">
+                <Button asChild className="w-full hover:bg-primary/90 hover:shadow-md transition-all">
                   <Link to={`/product/${product.id}`}>View Details</Link>
                 </Button>
               </CardFooter>
@@ -196,7 +205,7 @@ const FeaturedProducts = () => {
         </div>
 
         <div className="text-center mt-10">
-          <Button variant="outline" asChild size="lg">
+          <Button variant="outline" asChild size="lg" className="hover:border-primary/50 hover:text-primary transition-all">
             <Link to="/products">View All Products</Link>
           </Button>
         </div>

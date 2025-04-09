@@ -19,6 +19,7 @@ import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
 import PaymentMethods from "./pages/PaymentMethods";
 import Settings from "./pages/Settings";
+import Developers from "./pages/Developers";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment" element={<PaymentMethods />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/developers" element={<Developers />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
