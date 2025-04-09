@@ -94,9 +94,6 @@ const Navbar = () => {
             <Link to="/products" className="text-foreground hover:text-primary transition-colors">
               Browse
             </Link>
-            <Link to="/categories" className="text-foreground hover:text-primary transition-colors">
-              Categories
-            </Link>
             <Link to="/how-it-works" className="text-foreground hover:text-primary transition-colors">
               How It Works
             </Link>
@@ -238,12 +235,6 @@ const Navbar = () => {
               className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary"
             >
               Browse
-            </Link>
-            <Link
-              to="/categories"
-              className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary"
-            >
-              Categories
             </Link>
             <Link
               to="/how-it-works"

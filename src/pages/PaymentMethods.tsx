@@ -40,7 +40,8 @@ const PaymentMethods = () => {
       cardNumber: data.cardNumber.replace(/\d(?=\d{4})/g, "*"),
       expiryMonth: data.expiryMonth,
       expiryYear: data.expiryYear,
-      type: getCardType(data.cardNumber)
+      type: getCardType(data.cardNumber),
+      currency: "₹" // Add currency for Indian Rupees
     };
     
     // Add to state and localStorage
@@ -69,6 +70,7 @@ const PaymentMethods = () => {
     if (firstDigit === "5") return "Mastercard";
     if (firstDigit === "3") return "Amex";
     if (firstDigit === "6") return "Discover";
+    if (firstDigit === "2") return "RuPay"; // Adding RuPay for Indian users
     return "Credit Card";
   };
 

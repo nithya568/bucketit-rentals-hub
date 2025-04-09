@@ -21,7 +21,8 @@ const Checkout = () => {
     items: [],
     subtotal: 0,
     tax: 0,
-    total: 0
+    total: 0,
+    currency: "₹" // Default to Indian Rupees
   });
   
   // Load cart items from localStorage on component mount
@@ -33,14 +34,15 @@ const Checkout = () => {
       
       // Calculate totals
       const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-      const tax = subtotal * 0.08;
+      const tax = subtotal * 0.18; // GST in India is typically 18%
       const total = subtotal + tax;
       
       setCartSummary({
         items,
         subtotal,
         tax,
-        total
+        total,
+        currency: "₹"
       });
     }
   }, []);
@@ -57,6 +59,7 @@ const Checkout = () => {
       date: new Date().toISOString(),
       items: cartItems,
       total: cartSummary.total,
+      currency: "₹", // Set currency for order
       status: "active"
     };
     
@@ -120,20 +123,21 @@ const Checkout = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="city">City</Label>
-                    <Input id="city" placeholder="San Francisco" />
+                    <Input id="city" placeholder="Mumbai" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="state">State</Label>
-                    <Select defaultValue="CA">
+                    <Select defaultValue="MH">
                       <SelectTrigger id="state">
                         <SelectValue placeholder="Select a state" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="CA">California</SelectItem>
-                        <SelectItem value="NY">New York</SelectItem>
-                        <SelectItem value="TX">Texas</SelectItem>
-                        <SelectItem value="FL">Florida</SelectItem>
-                        <SelectItem value="IL">Illinois</SelectItem>
+                        <SelectItem value="MH">Maharashtra</SelectItem>
+                        <SelectItem value="DL">Delhi</SelectItem>
+                        <SelectItem value="KA">Karnataka</SelectItem>
+                        <SelectItem value="TN">Tamil Nadu</SelectItem>
+                        <SelectItem value="UP">Uttar Pradesh</SelectItem>
+                        <SelectItem value="GJ">Gujarat</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -141,12 +145,12 @@ const Checkout = () => {
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="zipCode">ZIP Code</Label>
-                    <Input id="zipCode" placeholder="94107" />
+                    <Label htmlFor="zipCode">PIN Code</Label>
+                    <Input id="zipCode" placeholder="400001" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">Phone</Label>
-                    <Input id="phone" placeholder="(555) 123-4567" />
+                    <Input id="phone" placeholder="+91 98765 43210" />
                   </div>
                 </div>
                 
@@ -173,12 +177,12 @@ const Checkout = () => {
                     <TabsTrigger value="card">
                       <CreditCard className="mr-2 h-4 w-4" /> Credit Card
                     </TabsTrigger>
-                    <TabsTrigger value="paypal">
+                    <TabsTrigger value="upi">
                       <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M19.5 8.5h-2a3 3 0 0 0-3 3v2a3 3 0 0 0 3 3h2a3 3 0 0 0 3-3v-2a3 3 0 0 0-3-3Z" stroke="currentColor" strokeWidth="2" />
                         <path d="M16.5 14.5v5a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2v-10a2 2 0 0 1 2-2h9" stroke="currentColor" strokeWidth="2" />
                       </svg>
-                      PayPal
+                      UPI
                     </TabsTrigger>
                   </TabsList>
                   
@@ -212,14 +216,15 @@ const Checkout = () => {
                     </div>
                   </TabsContent>
                   
-                  <TabsContent value="paypal" className="py-4">
-                    <div className="text-center space-y-4">
-                      <p className="text-muted-foreground">
-                        You will be redirected to PayPal to complete your payment.
+                  <TabsContent value="upi" className="py-4">
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="upiId">UPI ID</Label>
+                        <Input id="upiId" placeholder="yourname@upi" />
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        You will receive a payment request on your UPI app to complete the transaction.
                       </p>
-                      <Button>
-                        Continue with PayPal
-                      </Button>
                     </div>
                   </TabsContent>
                 </Tabs>
@@ -241,10 +246,10 @@ const Checkout = () => {
                       <div>
                         <p className="font-medium">{item.name}</p>
                         <p className="text-sm text-muted-foreground">
-                          ${item.price} × {item.quantity} ({item.duration})
+                          {cartSummary.currency}{item.price} × {item.quantity} ({item.duration})
                         </p>
                       </div>
-                      <p>${(item.price * item.quantity).toFixed(2)}</p>
+                      <p>{cartSummary.currency}{(item.price * item.quantity).toFixed(2)}</p>
                     </div>
                   ))}
                 </div>
@@ -252,18 +257,18 @@ const Checkout = () => {
                 <div className="pt-4 border-t space-y-2">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span>${cartSummary.subtotal.toFixed(2)}</span>
+                    <span>{cartSummary.currency}{cartSummary.subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Tax</span>
-                    <span>${cartSummary.tax.toFixed(2)}</span>
+                    <span className="text-muted-foreground">GST (18%)</span>
+                    <span>{cartSummary.currency}{cartSummary.tax.toFixed(2)}</span>
                   </div>
                 </div>
                 
                 <div className="pt-4 border-t">
                   <div className="flex justify-between font-bold">
                     <span>Total</span>
-                    <span>${cartSummary.total.toFixed(2)}</span>
+                    <span>{cartSummary.currency}{cartSummary.total.toFixed(2)}</span>
                   </div>
                 </div>
                 
