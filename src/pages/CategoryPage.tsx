@@ -10,10 +10,11 @@ import { Search } from "lucide-react";
 
 // Sample products data (In a real app, this would come from an API)
 const sampleProducts: Product[] = [
+  // Electronics
   {
     id: 1,
     name: "MacBook Pro 16\" M1 Pro",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=MacBook+Pro",
+    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
     description: "Latest model with 16GB RAM and 512GB SSD",
     category: "electronics",
     dailyPrice: 25,
@@ -24,7 +25,7 @@ const sampleProducts: Product[] = [
   {
     id: 2,
     name: "Sony A7 III Camera",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Sony+A7+III",
+    image: "https://images.unsplash.com/photo-1516724562728-afc824a36e84?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80",
     description: "Full-frame mirrorless camera with 24.2MP",
     category: "electronics",
     dailyPrice: 20,
@@ -35,18 +36,17 @@ const sampleProducts: Product[] = [
   {
     id: 5,
     name: "4K Smart TV 55\"",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Smart+TV",
+    image: "https://images.unsplash.com/photo-1593784991095-a205069470b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     description: "Ultra HD 4K resolution with built-in streaming apps",
     category: "electronics",
     dailyPrice: 15,
     weeklyPrice: 89,
-    monthlyPrice: 299,
-    available: false
+    monthlyPrice: 299
   },
   {
     id: 7,
     name: "Professional DSLR Camera",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=DSLR+Camera",
+    image: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     description: "High-end DSLR camera for professional photography",
     category: "electronics",
     dailyPrice: 22,
@@ -54,9 +54,21 @@ const sampleProducts: Product[] = [
     monthlyPrice: 420
   },
   {
+    id: 17,
+    name: "Gaming Console",
+    image: "https://images.unsplash.com/photo-1486572788966-cfd3df1f5b42?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
+    description: "Latest gaming console with controllers and games",
+    category: "electronics",
+    dailyPrice: 18,
+    weeklyPrice: 95,
+    monthlyPrice: 280
+  },
+  
+  // Furniture
+  {
     id: 3,
     name: "Modern Lounge Chair",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Lounge+Chair",
+    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1916&q=80",
     description: "Comfortable stylish chair for your living room",
     category: "furniture",
     dailyPrice: 8,
@@ -67,7 +79,7 @@ const sampleProducts: Product[] = [
   {
     id: 6,
     name: "Dining Table Set",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Dining+Table",
+    image: "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     description: "Modern dining table with 4 chairs for your home",
     category: "furniture",
     dailyPrice: 12,
@@ -75,9 +87,31 @@ const sampleProducts: Product[] = [
     monthlyPrice: 230
   },
   {
+    id: 15,
+    name: "Office Desk",
+    image: "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2036&q=80",
+    description: "Spacious modern desk perfect for home office setup",
+    category: "furniture",
+    dailyPrice: 10,
+    weeklyPrice: 50,
+    monthlyPrice: 150
+  },
+  {
+    id: 18,
+    name: "Sectional Sofa",
+    image: "https://images.unsplash.com/photo-1540574163026-643ea20ade25?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Large comfortable sectional sofa for family gatherings",
+    category: "furniture",
+    dailyPrice: 15,
+    weeklyPrice: 85,
+    monthlyPrice: 250
+  },
+  
+  // Tools
+  {
     id: 4,
     name: "Power Drill Set",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Power+Drill+Set",
+    image: "https://images.unsplash.com/photo-1563754357749-4a981a6ef2cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
     description: "Professional 18V cordless drill with accessories",
     category: "tools",
     dailyPrice: 7,
@@ -88,46 +122,192 @@ const sampleProducts: Product[] = [
   {
     id: 8,
     name: "Lawn Mower",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Lawn+Mower",
+    image: "https://images.unsplash.com/photo-1589260085307-5ae5deddf2a4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     description: "Powerful lawn mower for garden maintenance",
     category: "tools",
     dailyPrice: 10,
     weeklyPrice: 55,
     monthlyPrice: 180
+  },
+  {
+    id: 16,
+    name: "Pressure Washer",
+    image: "https://images.unsplash.com/photo-1621510007830-1835a9755279?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "High-pressure cleaner for outdoor surfaces and vehicles",
+    category: "tools",
+    dailyPrice: 15,
+    weeklyPrice: 75,
+    monthlyPrice: 220
+  },
+  {
+    id: 19,
+    name: "Table Saw",
+    image: "https://images.unsplash.com/photo-1503789146722-cf137a3c0fea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Professional table saw for woodworking projects",
+    category: "tools",
+    dailyPrice: 18,
+    weeklyPrice: 90,
+    monthlyPrice: 270
+  },
+  
+  // Books
+  {
+    id: 13,
+    name: "Bestseller Book Collection",
+    image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2198&q=80",
+    description: "Collection of 10 bestselling novels for your reading pleasure",
+    category: "books",
+    dailyPrice: 3,
+    weeklyPrice: 15,
+    monthlyPrice: 40
+  },
+  {
+    id: 14,
+    name: "Study Textbooks Bundle",
+    image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80",
+    description: "Bundle of textbooks for various subjects - perfect for students",
+    category: "books",
+    dailyPrice: 5,
+    weeklyPrice: 25,
+    monthlyPrice: 75
+  },
+  {
+    id: 20,
+    name: "Children's Book Set",
+    image: "https://images.unsplash.com/photo-1533903345306-15d1c30952de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Collection of popular children's books for all ages",
+    category: "books",
+    dailyPrice: 2,
+    weeklyPrice: 10,
+    monthlyPrice: 30
+  },
+  {
+    id: 21,
+    name: "Graphic Novel Collection",
+    image: "https://images.unsplash.com/photo-1588580000645-f93292f46764?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Curated collection of popular graphic novels and comics",
+    category: "books",
+    dailyPrice: 4,
+    weeklyPrice: 20,
+    monthlyPrice: 60
+  },
+  
+  // Appliances
+  {
+    id: 9,
+    name: "Professional Blender",
+    image: "https://images.unsplash.com/photo-1619070543343-58d3e1c85a4d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
+    description: "High-performance blender for smoothies and food prep",
+    category: "appliances",
+    dailyPrice: 5,
+    weeklyPrice: 30,
+    monthlyPrice: 90
+  },
+  {
+    id: 10,
+    name: "Coffee Machine",
+    image: "https://images.unsplash.com/photo-1595246007497-68e1e9dc0d8a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Premium espresso and coffee maker for coffee lovers",
+    category: "appliances",
+    dailyPrice: 8,
+    weeklyPrice: 45,
+    monthlyPrice: 135
+  },
+  {
+    id: 22,
+    name: "Stand Mixer",
+    image: "https://images.unsplash.com/photo-1622480916113-9cafe97d8ef0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
+    description: "Professional stand mixer for baking and cooking",
+    category: "appliances",
+    dailyPrice: 9,
+    weeklyPrice: 50,
+    monthlyPrice: 150
+  },
+  {
+    id: 23,
+    name: "Air Fryer",
+    image: "https://images.unsplash.com/photo-1648024131277-65e896e3a6e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
+    description: "Versatile air fryer for healthier cooking options",
+    category: "appliances",
+    dailyPrice: 6,
+    weeklyPrice: 35,
+    monthlyPrice: 100
+  },
+  
+  // Outdoor
+  {
+    id: 11,
+    name: "Camping Tent (4-Person)",
+    image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Waterproof tent with easy setup for outdoor adventures",
+    category: "outdoor",
+    dailyPrice: 12,
+    weeklyPrice: 65,
+    monthlyPrice: 190
+  },
+  {
+    id: 12,
+    name: "Mountain Bike",
+    image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "All-terrain mountain bike for trail riding and adventure",
+    category: "outdoor",
+    dailyPrice: 15,
+    weeklyPrice: 80,
+    monthlyPrice: 240
+  },
+  {
+    id: 24,
+    name: "Kayak",
+    image: "https://images.unsplash.com/photo-1606908486799-0fd2a7281942?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Single-person kayak with paddle for water adventures",
+    category: "outdoor",
+    dailyPrice: 14,
+    weeklyPrice: 75,
+    monthlyPrice: 220
+  },
+  {
+    id: 25,
+    name: "Barbecue Grill",
+    image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2026&q=80",
+    description: "Portable barbecue grill for outdoor cooking and gatherings",
+    category: "outdoor",
+    dailyPrice: 10,
+    weeklyPrice: 55,
+    monthlyPrice: 160
   }
 ];
 
-// Category information
+// Category information with better images
 const categoryInfo = {
   electronics: {
     title: "Electronics",
     description: "Rent the latest tech gadgets, laptops, cameras, and more",
-    bannerImage: "https://placehold.co/1200x300/2DD4BF/FFFFFF?text=Electronics+Category"
+    bannerImage: "https://images.unsplash.com/photo-1468436139062-f60a71c5c892?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
   },
   furniture: {
     title: "Furniture",
     description: "Quality furniture for your home, office, or special events",
-    bannerImage: "https://placehold.co/1200x300/2DD4BF/FFFFFF?text=Furniture+Category"
+    bannerImage: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2158&q=80"
   },
   tools: {
     title: "Tools & Equipment",
     description: "Professional tools and equipment for any project or task",
-    bannerImage: "https://placehold.co/1200x300/2DD4BF/FFFFFF?text=Tools+Category"
+    bannerImage: "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
   },
   books: {
     title: "Books",
     description: "Textbooks, novels, and other reading materials for all ages",
-    bannerImage: "https://placehold.co/1200x300/2DD4BF/FFFFFF?text=Books+Category"
+    bannerImage: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
   },
   appliances: {
     title: "Appliances",
     description: "Kitchen appliances, vacuums, and other household necessities",
-    bannerImage: "https://placehold.co/1200x300/2DD4BF/FFFFFF?text=Appliances+Category"
+    bannerImage: "https://images.unsplash.com/photo-1556911220-bda9d6c3a0c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
   },
   outdoor: {
     title: "Outdoor & Camping",
     description: "Everything you need for outdoor adventures and activities",
-    bannerImage: "https://placehold.co/1200x300/2DD4BF/FFFFFF?text=Outdoor+Category"
+    bannerImage: "https://images.unsplash.com/photo-1500835556837-99ac94a94552?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80"
   }
 };
 
@@ -195,15 +375,15 @@ const CategoryPage = () => {
 
   return (
     <Layout>
-      {/* Category Banner */}
-      <div className="relative">
+      {/* Category Banner with animation */}
+      <div className="relative animate-fade-in">
         <div className="h-48 md:h-64 overflow-hidden">
           <img
             src={category.bannerImage}
             alt={category.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform hover:scale-105 duration-500"
           />
-          <div className="absolute inset-0 bg-black/30 flex items-center">
+          <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-black/30 flex items-center">
             <div className="container mx-auto px-4">
               <h1 className="text-white text-3xl md:text-4xl font-bold">
                 {category.title}
@@ -262,7 +442,7 @@ const CategoryPage = () => {
           Showing {sortedProducts.length} results in {category.title}
         </p>
 
-        {/* Products Grid */}
+        {/* Products Grid with animation */}
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -282,12 +462,18 @@ const CategoryPage = () => {
           </div>
         ) : sortedProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sortedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {sortedProducts.map((product, index) => (
+              <div 
+                key={product.id} 
+                className="animate-fade-in" 
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <ProductCard product={product} />
+              </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 bg-muted/30 rounded-lg">
+          <div className="text-center py-12 bg-muted/30 rounded-lg animate-fade-in">
             <h3 className="text-xl font-medium mb-2">No products found</h3>
             <p className="text-muted-foreground mb-6">
               We couldn't find any products matching your criteria
@@ -295,6 +481,7 @@ const CategoryPage = () => {
             <Button 
               onClick={() => setSearchQuery("")}
               variant="outline"
+              className="hover:bg-primary/10 transition-colors"
             >
               Clear Search
             </Button>

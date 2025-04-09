@@ -10,12 +10,12 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search } from "lucide-react";
 
-// Sample products data (In a real app, this would come from an API)
+// Sample products data with high-quality images
 const sampleProducts: Product[] = [
   {
     id: 1,
     name: "MacBook Pro 16\" M1 Pro",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=MacBook+Pro",
+    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
     description: "Latest model with 16GB RAM and 512GB SSD",
     category: "electronics",
     dailyPrice: 25,
@@ -26,7 +26,7 @@ const sampleProducts: Product[] = [
   {
     id: 2,
     name: "Sony A7 III Camera",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Sony+A7+III",
+    image: "https://images.unsplash.com/photo-1516724562728-afc824a36e84?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80",
     description: "Full-frame mirrorless camera with 24.2MP",
     category: "electronics",
     dailyPrice: 20,
@@ -37,7 +37,7 @@ const sampleProducts: Product[] = [
   {
     id: 3,
     name: "Modern Lounge Chair",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Lounge+Chair",
+    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1916&q=80",
     description: "Comfortable stylish chair for your living room",
     category: "furniture",
     dailyPrice: 8,
@@ -48,7 +48,7 @@ const sampleProducts: Product[] = [
   {
     id: 4,
     name: "Power Drill Set",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Power+Drill+Set",
+    image: "https://images.unsplash.com/photo-1563754357749-4a981a6ef2cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
     description: "Professional 18V cordless drill with accessories",
     category: "tools",
     dailyPrice: 7,
@@ -59,18 +59,17 @@ const sampleProducts: Product[] = [
   {
     id: 5,
     name: "4K Smart TV 55\"",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Smart+TV",
+    image: "https://images.unsplash.com/photo-1593784991095-a205069470b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     description: "Ultra HD 4K resolution with built-in streaming apps",
     category: "electronics",
     dailyPrice: 15,
     weeklyPrice: 89,
-    monthlyPrice: 299,
-    available: false
+    monthlyPrice: 299
   },
   {
     id: 6,
     name: "Dining Table Set",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Dining+Table",
+    image: "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     description: "Modern dining table with 4 chairs for your home",
     category: "furniture",
     dailyPrice: 12,
@@ -80,7 +79,7 @@ const sampleProducts: Product[] = [
   {
     id: 7,
     name: "Professional DSLR Camera",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=DSLR+Camera",
+    image: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     description: "High-end DSLR camera for professional photography",
     category: "electronics",
     dailyPrice: 22,
@@ -90,12 +89,92 @@ const sampleProducts: Product[] = [
   {
     id: 8,
     name: "Lawn Mower",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Lawn+Mower",
+    image: "https://images.unsplash.com/photo-1589260085307-5ae5deddf2a4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     description: "Powerful lawn mower for garden maintenance",
     category: "tools",
     dailyPrice: 10,
     weeklyPrice: 55,
     monthlyPrice: 180
+  },
+  {
+    id: 9,
+    name: "Professional Blender",
+    image: "https://images.unsplash.com/photo-1619070543343-58d3e1c85a4d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
+    description: "High-performance blender for smoothies and food prep",
+    category: "appliances",
+    dailyPrice: 5,
+    weeklyPrice: 30,
+    monthlyPrice: 90
+  },
+  {
+    id: 10,
+    name: "Coffee Machine",
+    image: "https://images.unsplash.com/photo-1595246007497-68e1e9dc0d8a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Premium espresso and coffee maker for coffee lovers",
+    category: "appliances",
+    dailyPrice: 8,
+    weeklyPrice: 45,
+    monthlyPrice: 135
+  },
+  {
+    id: 11,
+    name: "Camping Tent (4-Person)",
+    image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Waterproof tent with easy setup for outdoor adventures",
+    category: "outdoor",
+    dailyPrice: 12,
+    weeklyPrice: 65,
+    monthlyPrice: 190
+  },
+  {
+    id: 12,
+    name: "Mountain Bike",
+    image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "All-terrain mountain bike for trail riding and adventure",
+    category: "outdoor",
+    dailyPrice: 15,
+    weeklyPrice: 80,
+    monthlyPrice: 240
+  },
+  {
+    id: 13,
+    name: "Bestseller Book Collection",
+    image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2198&q=80",
+    description: "Collection of 10 bestselling novels for your reading pleasure",
+    category: "books",
+    dailyPrice: 3,
+    weeklyPrice: 15,
+    monthlyPrice: 40
+  },
+  {
+    id: 14,
+    name: "Study Textbooks Bundle",
+    image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80",
+    description: "Bundle of textbooks for various subjects - perfect for students",
+    category: "books",
+    dailyPrice: 5,
+    weeklyPrice: 25,
+    monthlyPrice: 75
+  },
+  {
+    id: 15,
+    name: "Office Desk",
+    image: "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2036&q=80",
+    description: "Spacious modern desk perfect for home office setup",
+    category: "furniture",
+    dailyPrice: 10,
+    weeklyPrice: 50,
+    monthlyPrice: 150
+  },
+  {
+    id: 16,
+    name: "Pressure Washer",
+    image: "https://images.unsplash.com/photo-1621510007830-1835a9755279?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "High-pressure cleaner for outdoor surfaces and vehicles",
+    category: "tools",
+    dailyPrice: 15,
+    weeklyPrice: 75,
+    monthlyPrice: 220
   }
 ];
 
