@@ -1,14 +1,15 @@
 
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Product } from "@/components/products/ProductCard";
-import { Heart, IndianRupee } from "lucide-react";
+import { Heart, IndianRupee, XCircle } from "lucide-react";
 
 // Sample products data (In a real app, this would come from an API)
 const sampleProducts: Product[] = [
@@ -130,12 +131,12 @@ const sampleProducts: Product[] = [
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [rentalPeriod, setRentalPeriod] = useState("daily");
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [isInWishlist, setIsInWishlist] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     // Simulate API call to fetch product details
@@ -149,17 +150,21 @@ const ProductDetail = () => {
         const wishlist = JSON.parse(localStorage.getItem("bucketit_wishlist") || "[]");
         setIsInWishlist(wishlist.some((item: any) => item.id === foundProduct.id));
       } else {
-        // Product not found - redirect to a random product instead of showing "not found"
-        const randomProduct = sampleProducts[Math.floor(Math.random() * sampleProducts.length)];
-        navigate(`/product/${randomProduct.id}`);
-        toast.info("Redirected to an available product");
+        // Product not found - we DON'T redirect anymore
+        setNotFound(true);
       }
       setLoading(false);
     }, 500);
-  }, [id, navigate]);
+  }, [id]);
 
   const handleAddToCart = () => {
     if (!product) return;
+    
+    // Check if product is available
+    if (product.available === false) {
+      toast.error(`${product.name} is currently unavailable for rent`);
+      return;
+    }
     
     // Get existing cart
     const existingCart = JSON.parse(localStorage.getItem("bucketit_cart") || "[]");
@@ -259,21 +264,51 @@ const ProductDetail = () => {
     );
   }
 
+  if (notFound) {
+    return (
+      <Layout>
+        <div className="container mx-auto py-16 px-4 text-center">
+          <h1 className="text-3xl font-bold mb-4">Product Not Found</h1>
+          <p className="text-muted-foreground mb-8">
+            Sorry, we couldn't find the product you're looking for.
+          </p>
+          <Button asChild>
+            <Link to="/products">Browse All Products</Link>
+          </Button>
+        </div>
+      </Layout>
+    );
+  }
+
   if (!product) {
     return null;
   }
+
+  // Check if product is available
+  const isAvailable = product.available !== false;
 
   return (
     <Layout>
       <div className="container mx-auto py-12 px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Image */}
-          <div className="rounded-lg overflow-hidden border bg-white">
+          <div className="rounded-lg overflow-hidden border bg-white relative">
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-full object-contain"
+              className={`w-full h-full object-contain ${!isAvailable ? 'filter blur-[2px] opacity-90' : ''}`}
             />
+            {!isAvailable && (
+              <div className="absolute inset-0 bg-background/60 flex items-center justify-center flex-col gap-3">
+                <Badge variant="destructive" className="text-base py-2 px-4 flex items-center gap-2">
+                  <XCircle className="h-5 w-5" />
+                  <span>Unavailable at this time</span>
+                </Badge>
+                <p className="text-sm text-center max-w-md px-4 text-muted-foreground bg-background/80 py-2 rounded">
+                  This product is currently out of stock. You can add it to your wishlist to be notified when it becomes available.
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Product Details */}
@@ -305,9 +340,9 @@ const ProductDetail = () => {
               
               <Tabs value={rentalPeriod} onValueChange={setRentalPeriod}>
                 <TabsList className="grid grid-cols-3 mb-6">
-                  <TabsTrigger value="daily">Daily</TabsTrigger>
-                  <TabsTrigger value="weekly">Weekly</TabsTrigger>
-                  <TabsTrigger value="monthly">Monthly</TabsTrigger>
+                  <TabsTrigger value="daily" disabled={!isAvailable}>Daily</TabsTrigger>
+                  <TabsTrigger value="weekly" disabled={!isAvailable}>Weekly</TabsTrigger>
+                  <TabsTrigger value="monthly" disabled={!isAvailable}>Monthly</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="daily" className="space-y-4">
@@ -355,6 +390,7 @@ const ProductDetail = () => {
                   value={selectedQuantity.toString()}
                   onValueChange={(value) => setSelectedQuantity(parseInt(value))}
                   className="flex space-x-4"
+                  disabled={!isAvailable}
                 >
                   {[1, 2, 3, 4, 5].map((num) => (
                     <div key={num} className="flex items-center space-x-2">
@@ -373,9 +409,15 @@ const ProductDetail = () => {
                     {(getRentalPrice() * selectedQuantity).toLocaleString()}
                   </span>
                 </div>
-                <Button onClick={handleAddToCart} className="w-full py-6 text-lg">
-                  Add to Cart
-                </Button>
+                {isAvailable ? (
+                  <Button onClick={handleAddToCart} className="w-full py-6 text-lg">
+                    Add to Cart
+                  </Button>
+                ) : (
+                  <Button variant="secondary" className="w-full py-6 text-lg" disabled>
+                    Currently Unavailable
+                  </Button>
+                )}
               </div>
             </div>
             

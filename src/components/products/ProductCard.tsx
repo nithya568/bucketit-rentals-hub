@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, ShoppingCart, IndianRupee } from "lucide-react";
+import { Heart, ShoppingCart, IndianRupee, XCircle } from "lucide-react";
 import { toast } from "sonner";
 
 export interface Product {
@@ -86,22 +86,23 @@ const ProductCard = ({ product }: ProductCardProps) => {
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 h-full flex flex-col group">
+    <Card className={`overflow-hidden hover:shadow-lg transition-all duration-300 h-full flex flex-col group ${!isAvailable ? 'opacity-90' : ''}`}>
       <div className="aspect-video relative overflow-hidden">
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 ${!isAvailable ? 'filter blur-[2px]' : ''}`}
         />
-        {product.featured && (
+        {product.featured && isAvailable && (
           <Badge className="absolute top-3 right-3 bg-accent/90 hover:bg-accent animate-fade-in">
             Featured
           </Badge>
         )}
         {!isAvailable && (
-          <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
-            <Badge variant="destructive" className="text-sm py-1.5">
-              Currently Unavailable
+          <div className="absolute inset-0 bg-background/60 flex items-center justify-center">
+            <Badge variant="destructive" className="text-sm py-2 px-3 flex items-center gap-2">
+              <XCircle className="h-4 w-4" />
+              <span>Unavailable at this time</span>
             </Badge>
           </div>
         )}
@@ -170,10 +171,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <Button 
           asChild 
           className="w-full transition-transform hover:translate-y-[-2px]" 
+          variant={!isAvailable ? "secondary" : "default"}
           disabled={!isAvailable}
         >
           <Link to={`/product/${product.id}`}>
-            {!isAvailable ? "Not Available" : "View Details"}
+            {!isAvailable ? "Unavailable" : "View Details"}
           </Link>
         </Button>
       </CardFooter>
