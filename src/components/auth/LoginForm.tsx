@@ -25,8 +25,16 @@ const LoginForm = () => {
       
       // For demo purposes, always succeed with any valid-looking email
       if (email.includes("@") && password.length >= 6) {
+        // Save user data to localStorage for demonstration purposes
+        const userData = {
+          fullName: "John Doe", // Default name, would typically come from the backend
+          email,
+          createdAt: new Date().toISOString(),
+        };
+        localStorage.setItem("bucketit_user", JSON.stringify(userData));
+        
         toast.success("Login successful!");
-        navigate("/");
+        navigate("/profile"); // Redirect to profile page instead of homepage
       } else {
         toast.error("Invalid email or password");
       }
