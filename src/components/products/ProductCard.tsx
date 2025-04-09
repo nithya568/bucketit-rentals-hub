@@ -24,8 +24,8 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  // Ensure product is always available unless explicitly set to false
-  const isAvailable = product.available !== false;
+  // Always mark products as available
+  const isAvailable = true;
   
   const addToWishlist = () => {
     // Get existing wishlist

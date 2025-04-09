@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { Product } from "@/components/products/ProductCard";
 import { Heart, IndianRupee, XCircle } from "lucide-react";
 
-// Sample products data (In a real app, this would come from an API)
+// Sample products data with available flag set to true for all products
 const sampleProducts: Product[] = [
   {
     id: 1,
@@ -284,8 +284,8 @@ const ProductDetail = () => {
     return null;
   }
 
-  // Check if product is available
-  const isAvailable = product.available !== false;
+  // Always set product as available
+  const isAvailable = true;
 
   return (
     <Layout>

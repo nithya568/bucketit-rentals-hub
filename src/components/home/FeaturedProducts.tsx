@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, ShoppingCart, IndianRupee } from "lucide-react";
 import { toast } from "sonner";
 
-// Sample featured products data with better images
+// Sample featured products data with all products set to available
 const featuredProducts = [
   {
     id: 1,
@@ -17,6 +17,7 @@ const featuredProducts = [
     dailyPrice: 1999,
     weeklyPrice: 10999,
     monthlyPrice: 39999,
+    available: true
   },
   {
     id: 2,
@@ -27,6 +28,7 @@ const featuredProducts = [
     dailyPrice: 1499,
     weeklyPrice: 8999,
     monthlyPrice: 29999,
+    available: true
   },
   {
     id: 3,
@@ -37,6 +39,7 @@ const featuredProducts = [
     dailyPrice: 599,
     weeklyPrice: 3499,
     monthlyPrice: 11999,
+    available: true
   },
   {
     id: 4,
@@ -47,6 +50,7 @@ const featuredProducts = [
     dailyPrice: 499,
     weeklyPrice: 2999,
     monthlyPrice: 9999,
+    available: true
   },
 ];
 
