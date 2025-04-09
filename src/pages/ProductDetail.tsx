@@ -8,13 +8,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Product } from "@/components/products/ProductCard";
+import { Heart } from "lucide-react";
 
 // Sample products data (In a real app, this would come from an API)
 const sampleProducts: Product[] = [
   {
     id: 1,
     name: "MacBook Pro 16\" M1 Pro",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=MacBook+Pro",
+    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
     description: "Latest model with 16GB RAM and 512GB SSD. This powerful laptop is perfect for professionals and creatives who need high performance on the go. Features the M1 Pro chip, a brilliant Retina XDR display, and all-day battery life.",
     category: "electronics",
     dailyPrice: 25,
@@ -25,7 +26,7 @@ const sampleProducts: Product[] = [
   {
     id: 2,
     name: "Sony A7 III Camera",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Sony+A7+III",
+    image: "https://images.unsplash.com/photo-1516724562728-afc824a36e84?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80",
     description: "Full-frame mirrorless camera with 24.2MP sensor. Exceptional image quality, 4K video recording, and advanced autofocus make this camera ideal for both photography enthusiasts and professionals. Includes a versatile 28-70mm lens.",
     category: "electronics",
     dailyPrice: 20,
@@ -36,7 +37,7 @@ const sampleProducts: Product[] = [
   {
     id: 3,
     name: "Modern Lounge Chair",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Lounge+Chair",
+    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1916&q=80",
     description: "Comfortable stylish chair for your living room. Ergonomically designed with premium upholstery and solid wood legs. Perfect for reading, relaxing, or adding a touch of modern elegance to any space.",
     category: "furniture",
     dailyPrice: 8,
@@ -47,7 +48,7 @@ const sampleProducts: Product[] = [
   {
     id: 4,
     name: "Power Drill Set",
-    image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Power+Drill+Set",
+    image: "https://images.unsplash.com/photo-1563754357749-4a981a6ef2cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
     description: "Professional 18V cordless drill with accessories. This complete kit includes multiple drill bits, a charger, and a carrying case. Powerful enough for home projects and professional work alike.",
     category: "tools",
     dailyPrice: 7,
@@ -64,6 +65,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [rentalPeriod, setRentalPeriod] = useState("daily");
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [isInWishlist, setIsInWishlist] = useState(false);
 
   useEffect(() => {
     // Simulate API call to fetch product details
@@ -72,6 +74,10 @@ const ProductDetail = () => {
       const foundProduct = sampleProducts.find((p) => p.id === Number(id));
       if (foundProduct) {
         setProduct(foundProduct);
+        
+        // Check if item is in wishlist
+        const wishlist = JSON.parse(localStorage.getItem("bucketit_wishlist") || "[]");
+        setIsInWishlist(wishlist.some((item: any) => item.id === foundProduct.id));
       } else {
         // Product not found
         navigate("/products");
@@ -84,15 +90,70 @@ const ProductDetail = () => {
   const handleAddToCart = () => {
     if (!product) return;
     
-    // In a real app, this would add the item to the cart state or send to API
-    const period = rentalPeriod === "daily" ? "day" : rentalPeriod === "weekly" ? "week" : "month";
+    // Get existing cart
+    const existingCart = JSON.parse(localStorage.getItem("bucketit_cart") || "[]");
+    
+    // Check if item already in cart
+    const itemInCart = existingCart.find((item: any) => item.id === product.id);
+    
+    if (itemInCart) {
+      toast.info(`${product.name} is already in your cart`);
+      return;
+    }
+    
+    // Get price based on rental period
     const price = rentalPeriod === "daily" 
       ? product.dailyPrice 
       : rentalPeriod === "weekly" 
         ? product.weeklyPrice 
         : product.monthlyPrice;
     
-    toast.success(`Added ${product.name} for ${selectedQuantity} ${selectedQuantity > 1 ? period + 's' : period} to your cart`);
+    // Add item to cart
+    const newItem = {
+      id: product.id,
+      name: product.name,
+      image: product.image,
+      price: price,
+      duration: rentalPeriod,
+      quantity: selectedQuantity
+    };
+    
+    const updatedCart = [...existingCart, newItem];
+    localStorage.setItem("bucketit_cart", JSON.stringify(updatedCart));
+    
+    // Trigger storage update event
+    window.dispatchEvent(new Event("bucketit_storage_update"));
+    
+    toast.success(`Added ${product.name} to your cart`);
+  };
+  
+  const toggleWishlist = () => {
+    if (!product) return;
+    
+    // Get existing wishlist
+    const existingWishlist = JSON.parse(localStorage.getItem("bucketit_wishlist") || "[]");
+    
+    if (isInWishlist) {
+      // Remove from wishlist
+      const updatedWishlist = existingWishlist.filter((item: any) => item.id !== product.id);
+      localStorage.setItem("bucketit_wishlist", JSON.stringify(updatedWishlist));
+      setIsInWishlist(false);
+      toast.success(`${product.name} removed from wishlist`);
+    } else {
+      // Add to wishlist
+      const wishlistItem = {
+        ...product,
+        addedAt: new Date().toISOString()
+      };
+      
+      const updatedWishlist = [...existingWishlist, wishlistItem];
+      localStorage.setItem("bucketit_wishlist", JSON.stringify(updatedWishlist));
+      setIsInWishlist(true);
+      toast.success(`${product.name} added to wishlist`);
+    }
+    
+    // Trigger storage update event
+    window.dispatchEvent(new Event("bucketit_storage_update"));
   };
 
   const getRentalPrice = () => {
@@ -146,11 +207,21 @@ const ProductDetail = () => {
 
           {/* Product Details */}
           <div>
-            <div className="mb-4">
-              <span className="text-sm text-muted-foreground uppercase tracking-wider">
-                {product.category}
-              </span>
-              <h1 className="text-3xl font-bold mt-1">{product.name}</h1>
+            <div className="mb-4 flex justify-between items-start">
+              <div>
+                <span className="text-sm text-muted-foreground uppercase tracking-wider">
+                  {product.category}
+                </span>
+                <h1 className="text-3xl font-bold mt-1">{product.name}</h1>
+              </div>
+              <Button 
+                variant={isInWishlist ? "default" : "outline"}
+                size="icon"
+                onClick={toggleWishlist}
+                className="flex-shrink-0"
+              >
+                <Heart className={`h-4 w-4 ${isInWishlist ? 'fill-current' : ''}`} />
+              </Button>
             </div>
 
             <div className="prose max-w-none mb-8">

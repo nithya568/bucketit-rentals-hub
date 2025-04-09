@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash, ShoppingBag } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 interface CartItem {
@@ -19,6 +19,7 @@ interface CartItem {
 }
 
 const Cart = () => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   // Load cart items from localStorage on component mount
@@ -68,6 +69,17 @@ const Cart = () => {
       return item;
     });
     setCartItems(updatedItems);
+  };
+
+  const handleCheckout = () => {
+    // Make sure we have items in the cart
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty");
+      return;
+    }
+    
+    // Navigate to checkout
+    navigate("/checkout");
   };
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -182,11 +194,13 @@ const Cart = () => {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button asChild className="w-full" size="lg">
-                    <Link to="/checkout">
-                      <ShoppingBag className="mr-2 h-4 w-4" />
-                      Proceed to Checkout
-                    </Link>
+                  <Button 
+                    className="w-full" 
+                    size="lg"
+                    onClick={handleCheckout}
+                  >
+                    <ShoppingBag className="mr-2 h-4 w-4" />
+                    Proceed to Checkout
                   </Button>
                 </CardFooter>
               </Card>
