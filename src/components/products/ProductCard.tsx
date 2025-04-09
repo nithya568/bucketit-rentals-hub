@@ -24,6 +24,9 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  // Ensure product is always available unless explicitly set to false
+  const isAvailable = product.available !== false;
+  
   const addToWishlist = () => {
     // Get existing wishlist
     const existingWishlist = JSON.parse(localStorage.getItem("bucketit_wishlist") || "[]");
@@ -95,7 +98,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             Featured
           </Badge>
         )}
-        {product.available === false && (
+        {!isAvailable && (
           <div className="absolute inset-0 bg-background/80 flex items-center justify-center">
             <Badge variant="destructive" className="text-sm py-1.5">
               Currently Unavailable
@@ -116,7 +119,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
             variant="secondary" 
             className="rounded-full h-8 w-8 shadow-md hover:bg-primary hover:text-white"
             onClick={addToCart}
-            disabled={product.available === false}
+            disabled={!isAvailable}
           >
             <ShoppingCart className="h-4 w-4" />
           </Button>
@@ -144,21 +147,21 @@ const ProductCard = ({ product }: ProductCardProps) => {
             <span className="text-muted-foreground">Daily</span>
             <span className="text-foreground flex items-center">
               <IndianRupee className="h-3 w-3 mr-1" />
-              {product.dailyPrice}
+              {product.dailyPrice.toLocaleString()}
             </span>
           </div>
           <div className="flex flex-col">
             <span className="text-muted-foreground">Weekly</span>
             <span className="text-foreground flex items-center">
               <IndianRupee className="h-3 w-3 mr-1" />
-              {product.weeklyPrice}
+              {product.weeklyPrice.toLocaleString()}
             </span>
           </div>
           <div className="flex flex-col">
             <span className="text-muted-foreground">Monthly</span>
             <span className="text-foreground flex items-center">
               <IndianRupee className="h-3 w-3 mr-1" />
-              {product.monthlyPrice}
+              {product.monthlyPrice.toLocaleString()}
             </span>
           </div>
         </div>
@@ -167,10 +170,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <Button 
           asChild 
           className="w-full transition-transform hover:translate-y-[-2px]" 
-          disabled={product.available === false}
+          disabled={!isAvailable}
         >
           <Link to={`/product/${product.id}`}>
-            {product.available === false ? "Not Available" : "View Details"}
+            {!isAvailable ? "Not Available" : "View Details"}
           </Link>
         </Button>
       </CardFooter>

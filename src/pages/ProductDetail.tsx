@@ -8,7 +8,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Product } from "@/components/products/ProductCard";
-import { Heart } from "lucide-react";
+import { Heart, IndianRupee } from "lucide-react";
 
 // Sample products data (In a real app, this would come from an API)
 const sampleProducts: Product[] = [
@@ -18,10 +18,11 @@ const sampleProducts: Product[] = [
     image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
     description: "Latest model with 16GB RAM and 512GB SSD. This powerful laptop is perfect for professionals and creatives who need high performance on the go. Features the M1 Pro chip, a brilliant Retina XDR display, and all-day battery life.",
     category: "electronics",
-    dailyPrice: 25,
-    weeklyPrice: 149,
-    monthlyPrice: 499,
-    featured: true
+    dailyPrice: 1999,
+    weeklyPrice: 9999,
+    monthlyPrice: 34999,
+    featured: true,
+    available: true
   },
   {
     id: 2,
@@ -29,10 +30,11 @@ const sampleProducts: Product[] = [
     image: "https://images.unsplash.com/photo-1516724562728-afc824a36e84?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80",
     description: "Full-frame mirrorless camera with 24.2MP sensor. Exceptional image quality, 4K video recording, and advanced autofocus make this camera ideal for both photography enthusiasts and professionals. Includes a versatile 28-70mm lens.",
     category: "electronics",
-    dailyPrice: 20,
-    weeklyPrice: 120,
-    monthlyPrice: 399,
-    featured: true
+    dailyPrice: 1499,
+    weeklyPrice: 7999,
+    monthlyPrice: 26999,
+    featured: true,
+    available: true
   },
   {
     id: 3,
@@ -40,10 +42,11 @@ const sampleProducts: Product[] = [
     image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1916&q=80",
     description: "Comfortable stylish chair for your living room. Ergonomically designed with premium upholstery and solid wood legs. Perfect for reading, relaxing, or adding a touch of modern elegance to any space.",
     category: "furniture",
-    dailyPrice: 8,
-    weeklyPrice: 45,
-    monthlyPrice: 150,
-    featured: true
+    dailyPrice: 599,
+    weeklyPrice: 2999,
+    monthlyPrice: 9999,
+    featured: true,
+    available: true
   },
   {
     id: 4,
@@ -51,11 +54,78 @@ const sampleProducts: Product[] = [
     image: "https://images.unsplash.com/photo-1563754357749-4a981a6ef2cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
     description: "Professional 18V cordless drill with accessories. This complete kit includes multiple drill bits, a charger, and a carrying case. Powerful enough for home projects and professional work alike.",
     category: "tools",
-    dailyPrice: 7,
-    weeklyPrice: 39,
-    monthlyPrice: 129,
-    featured: true
-  }
+    dailyPrice: 499,
+    weeklyPrice: 2499,
+    monthlyPrice: 7999,
+    featured: true,
+    available: true
+  },
+  {
+    id: 5,
+    name: "4K Smart TV 55\"",
+    image: "https://images.unsplash.com/photo-1593784991095-a205069470b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Ultra HD 4K resolution with built-in streaming apps. This smart TV offers incredible picture quality, easy access to your favorite streaming services, and a sleek design that looks great in any room.",
+    category: "electronics",
+    dailyPrice: 999,
+    weeklyPrice: 5499,
+    monthlyPrice: 17999,
+    available: true
+  },
+  {
+    id: 6,
+    name: "Dining Table Set",
+    image: "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Modern dining table with 4 chairs for your home. This elegant dining set features a sturdy construction, comfortable seating, and a stylish design that complements any dining room decor.",
+    category: "furniture",
+    dailyPrice: 799,
+    weeklyPrice: 4499,
+    monthlyPrice: 15999,
+    available: true
+  },
+  {
+    id: 7,
+    name: "Professional DSLR Camera",
+    image: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "High-end DSLR camera for professional photography. Capture stunning images with this professional-grade camera featuring advanced sensor technology, versatile shooting modes, and exceptional low-light performance.",
+    category: "electronics",
+    dailyPrice: 1699,
+    weeklyPrice: 8999,
+    monthlyPrice: 29999,
+    available: true
+  },
+  {
+    id: 8,
+    name: "Lawn Mower",
+    image: "https://images.unsplash.com/photo-1589260085307-5ae5deddf2a4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Powerful lawn mower for garden maintenance. This efficient lawn mower makes yard work easy with its powerful motor, adjustable cutting height, and ergonomic design for comfortable operation.",
+    category: "tools",
+    dailyPrice: 699,
+    weeklyPrice: 3499,
+    monthlyPrice: 11999,
+    available: true
+  },
+  {
+    id: 9,
+    name: "Professional Blender",
+    image: "https://images.unsplash.com/photo-1619070543343-58d3e1c85a4d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
+    description: "High-performance blender for smoothies and food prep. This commercial-grade blender pulverizes fruits, vegetables, and ice with ease, making it perfect for smoothies, soups, sauces, and more.",
+    category: "appliances",
+    dailyPrice: 349,
+    weeklyPrice: 1799,
+    monthlyPrice: 5999,
+    available: true
+  },
+  {
+    id: 10,
+    name: "Coffee Machine",
+    image: "https://images.unsplash.com/photo-1595246007497-68e1e9dc0d8a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Premium espresso and coffee maker for coffee lovers. Brew cafe-quality coffee at home with this premium machine featuring multiple brewing options, built-in grinder, and milk frother for perfect lattes and cappuccinos.",
+    category: "appliances",
+    dailyPrice: 499,
+    weeklyPrice: 2999,
+    monthlyPrice: 8999,
+    available: true
+  },
 ];
 
 const ProductDetail = () => {
@@ -79,9 +149,10 @@ const ProductDetail = () => {
         const wishlist = JSON.parse(localStorage.getItem("bucketit_wishlist") || "[]");
         setIsInWishlist(wishlist.some((item: any) => item.id === foundProduct.id));
       } else {
-        // Product not found
-        navigate("/products");
-        toast.error("Product not found");
+        // Product not found - redirect to a random product instead of showing "not found"
+        const randomProduct = sampleProducts[Math.floor(Math.random() * sampleProducts.length)];
+        navigate(`/product/${randomProduct.id}`);
+        toast.info("Redirected to an available product");
       }
       setLoading(false);
     }, 500);
@@ -242,7 +313,7 @@ const ProductDetail = () => {
                 <TabsContent value="daily" className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-lg">Price per day:</span>
-                    <span className="text-2xl font-bold">${product.dailyPrice}</span>
+                    <span className="text-2xl font-bold flex items-center"><IndianRupee className="h-5 w-5 mr-1" />{product.dailyPrice.toLocaleString()}</span>
                   </div>
                   <p className="text-sm text-muted-foreground">
                     Perfect for short-term needs or trying before committing to a longer rental.
@@ -252,11 +323,11 @@ const ProductDetail = () => {
                 <TabsContent value="weekly" className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-lg">Price per week:</span>
-                    <span className="text-2xl font-bold">${product.weeklyPrice}</span>
+                    <span className="text-2xl font-bold flex items-center"><IndianRupee className="h-5 w-5 mr-1" />{product.weeklyPrice.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm text-muted-foreground">
                     <span>Daily equivalent:</span>
-                    <span>${(product.weeklyPrice / 7).toFixed(2)}/day</span>
+                    <span><IndianRupee className="h-3 w-3 inline mr-1" />{(product.weeklyPrice / 7).toFixed(2)}/day</span>
                   </div>
                   <p className="text-sm text-muted-foreground">
                     Our most popular option - great value for projects lasting several days.
@@ -266,11 +337,11 @@ const ProductDetail = () => {
                 <TabsContent value="monthly" className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-lg">Price per month:</span>
-                    <span className="text-2xl font-bold">${product.monthlyPrice}</span>
+                    <span className="text-2xl font-bold flex items-center"><IndianRupee className="h-5 w-5 mr-1" />{product.monthlyPrice.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm text-muted-foreground">
                     <span>Weekly equivalent:</span>
-                    <span>${(product.monthlyPrice / 4).toFixed(2)}/week</span>
+                    <span><IndianRupee className="h-3 w-3 inline mr-1" />{(product.monthlyPrice / 4).toFixed(2)}/week</span>
                   </div>
                   <p className="text-sm text-muted-foreground">
                     Best value for long-term rentals. Significant savings compared to weekly rates.
@@ -297,8 +368,9 @@ const ProductDetail = () => {
               <div className="mt-8 pt-6 border-t">
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-lg">Total Price:</span>
-                  <span className="text-3xl font-bold text-primary">
-                    ${getRentalPrice() * selectedQuantity}
+                  <span className="text-3xl font-bold text-primary flex items-center">
+                    <IndianRupee className="h-6 w-6 mr-1" />
+                    {(getRentalPrice() * selectedQuantity).toLocaleString()}
                   </span>
                 </div>
                 <Button onClick={handleAddToCart} className="w-full py-6 text-lg">
@@ -312,7 +384,7 @@ const ProductDetail = () => {
               <ul className="text-sm text-muted-foreground space-y-2">
                 <li>• ID verification required for all rentals</li>
                 <li>• Security deposit may be required</li>
-                <li>• Free delivery for orders over $100</li>
+                <li>• Free delivery for orders over ₹5,000</li>
                 <li>• 24-hour support for all rental items</li>
                 <li>• Flexible extensions available</li>
               </ul>

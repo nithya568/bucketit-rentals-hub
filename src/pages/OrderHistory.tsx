@@ -1,315 +1,164 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Layout from "@/components/layout/Layout";
-import DashboardLayout from "@/components/layout/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Eye, Download, ShoppingCart, ArrowLeft, Printer } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { format } from "date-fns";
+import { IndianRupee, Download, FileText } from "lucide-react";
 
-interface Order {
-  id: string;
-  date: string;
-  items: {
-    id: number;
-    name: string;
-    image: string;
-    price: number;
-    quantity: number;
-    duration: string;
-  }[];
-  total: number;
-  status: "active" | "completed" | "cancelled";
-  currency?: string;
-}
-
-interface OrderViewProps {
-  order: Order;
-}
-
-const OrderView = ({ order }: OrderViewProps) => {
-  const currency = order.currency || "₹";
-  
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-start">
-        <div>
-          <h3 className="text-lg font-medium">Order Details</h3>
-          <p className="text-sm text-muted-foreground">Order ID: {order.id}</p>
-          <p className="text-sm text-muted-foreground">Date: {formatDate(order.date)}</p>
-        </div>
-        <Badge className={`${getStatusColor(order.status)} capitalize`}>
-          {order.status}
-        </Badge>
-      </div>
-      
-      <div className="border rounded-md overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Product</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Quantity</TableHead>
-              <TableHead>Duration</TableHead>
-              <TableHead className="text-right">Total</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {order.items.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell>
-                  <div className="flex items-center space-x-3">
-                    <div className="h-12 w-12 rounded-md overflow-hidden">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                    <div>
-                      <p className="font-medium">{item.name}</p>
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell>{currency}{item.price.toFixed(2)}</TableCell>
-                <TableCell>{item.quantity}</TableCell>
-                <TableCell>{item.duration}</TableCell>
-                <TableCell className="text-right">{currency}{(item.price * item.quantity).toFixed(2)}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-      
-      <div className="bg-muted/30 rounded-md p-4">
-        <div className="space-y-2">
-          <div className="flex justify-between">
-            <span>Subtotal</span>
-            <span>{currency}{(order.total * 0.82).toFixed(2)}</span>
-          </div>
-          <div className="flex justify-between">
-            <span>GST (18%)</span>
-            <span>{currency}{(order.total * 0.18).toFixed(2)}</span>
-          </div>
-          <div className="flex justify-between border-t pt-2 font-medium">
-            <span>Total</span>
-            <span>{currency}{order.total.toFixed(2)}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+// Helper functions
+const formatDate = (dateString: string) => {
+  return format(new Date(dateString), "MMM dd, yyyy");
 };
 
-// Receipt component for printing
-const OrderReceipt = ({ order }: OrderViewProps) => {
-  const currency = order.currency || "₹";
-  
-  const handlePrint = () => {
-    window.print();
-  };
-  
-  return (
-    <div className="space-y-6">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold">BucketIt Receipt</h2>
-        <p className="text-sm text-muted-foreground">love it..rent it</p>
-      </div>
-      
-      <div className="flex justify-between items-start">
-        <div>
-          <p className="text-sm">Order ID: <strong>{order.id}</strong></p>
-          <p className="text-sm">Date: <strong>{formatDate(order.date)}</strong></p>
-        </div>
-        <Badge className={`${getStatusColor(order.status)} capitalize`}>
-          {order.status}
-        </Badge>
-      </div>
-      
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="border-b">
-            <th className="text-left py-2">Item</th>
-            <th className="text-right py-2">Price</th>
-            <th className="text-right py-2">Qty</th>
-            <th className="text-right py-2">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {order.items.map((item) => (
-            <tr key={item.id} className="border-b">
-              <td className="py-2">
-                <div>
-                  <p className="font-medium">{item.name}</p>
-                  <p className="text-xs text-muted-foreground">{item.duration}</p>
-                </div>
-              </td>
-              <td className="text-right py-2">{currency}{item.price.toFixed(2)}</td>
-              <td className="text-right py-2">{item.quantity}</td>
-              <td className="text-right py-2">{currency}{(item.price * item.quantity).toFixed(2)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      
-      <div className="mt-4 border-t pt-2">
-        <div className="flex justify-between py-1">
-          <span>Subtotal</span>
-          <span>{currency}{(order.total * 0.82).toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between py-1">
-          <span>GST (18%)</span>
-          <span>{currency}{(order.total * 0.18).toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between py-1 font-bold border-t mt-2 pt-2">
-          <span>Total</span>
-          <span>{currency}{order.total.toFixed(2)}</span>
-        </div>
-      </div>
-      
-      <div className="mt-8 text-center">
-        <p className="text-sm">Thank you for renting with BucketIt!</p>
-        <p className="text-xs text-muted-foreground">© 2025 BucketIt. All rights reserved.</p>
-      </div>
-      
-      <div className="print:hidden mt-6 flex justify-end">
-        <Button onClick={handlePrint} className="flex items-center">
-          <Printer className="mr-2 h-4 w-4" /> Print Receipt
-        </Button>
-      </div>
-    </div>
-  );
+const getStatusColor = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "delivered":
+      return "bg-green-500 hover:bg-green-600";
+    case "in transit":
+      return "bg-blue-500 hover:bg-blue-600";
+    case "processing":
+      return "bg-yellow-500 hover:bg-yellow-600";
+    case "cancelled":
+      return "bg-red-500 hover:bg-red-600";
+    case "returned":
+      return "bg-purple-500 hover:bg-purple-600";
+    default:
+      return "bg-gray-500 hover:bg-gray-600";
+  }
 };
+
+// Sample order data
+const sampleOrders = [
+  {
+    id: "ORD123456",
+    date: "2023-04-01T10:30:00Z",
+    status: "Delivered",
+    total: 8999,
+    items: [
+      {
+        id: 1,
+        name: "MacBook Pro 16\" M1 Pro",
+        image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
+        price: 4999,
+        duration: "weekly",
+        quantity: 1
+      },
+      {
+        id: 4,
+        name: "Power Drill Set",
+        image: "https://images.unsplash.com/photo-1563754357749-4a981a6ef2cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+        price: 2999,
+        duration: "monthly",
+        quantity: 1
+      },
+      {
+        id: 7,
+        name: "Professional DSLR Camera",
+        image: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+        price: 1999,
+        duration: "weekly",
+        quantity: 1
+      }
+    ],
+    shippingAddress: {
+      name: "Rahul Sharma",
+      street: "123 MG Road",
+      city: "Bangalore",
+      state: "Karnataka",
+      zip: "560001",
+      country: "India"
+    },
+    paymentMethod: "UPI - rahul@okicici"
+  },
+  {
+    id: "ORD789012",
+    date: "2023-03-15T14:20:00Z",
+    status: "Delivered",
+    total: 7599,
+    items: [
+      {
+        id: 12,
+        name: "Mountain Bike",
+        image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+        price: 4999,
+        duration: "monthly",
+        quantity: 1
+      },
+      {
+        id: 11,
+        name: "Camping Tent (4-Person)",
+        image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+        price: 2599,
+        duration: "weekly",
+        quantity: 1
+      }
+    ],
+    shippingAddress: {
+      name: "Rahul Sharma",
+      street: "123 MG Road",
+      city: "Bangalore",
+      state: "Karnataka",
+      zip: "560001",
+      country: "India"
+    },
+    paymentMethod: "Credit Card (ending in 4242)"
+  },
+  {
+    id: "ORD345678",
+    date: "2023-02-28T09:15:00Z",
+    status: "Returned",
+    total: 3499,
+    items: [
+      {
+        id: 9,
+        name: "Professional Blender",
+        image: "https://images.unsplash.com/photo-1619070543343-58d3e1c85a4d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
+        price: 3499,
+        duration: "monthly",
+        quantity: 1
+      }
+    ],
+    shippingAddress: {
+      name: "Rahul Sharma",
+      street: "123 MG Road",
+      city: "Bangalore",
+      state: "Karnataka",
+      zip: "560001",
+      country: "India"
+    },
+    paymentMethod: "UPI - rahul@okicici"
+  }
+];
 
 const OrderHistory = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [viewType, setViewType] = useState<"list" | "detail" | "receipt">("list");
-  
-  useEffect(() => {
-    // Load orders from localStorage if they exist
-    const savedOrders = localStorage.getItem("bucketit_orders");
-    if (savedOrders) {
-      setOrders(JSON.parse(savedOrders));
-    }
-    
-    // Listen for storage events to update orders when they change
-    const handleStorageChange = () => {
-      const updatedOrders = JSON.parse(localStorage.getItem("bucketit_orders") || "[]");
-      setOrders(updatedOrders);
-    };
-    
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener("bucketit_storage_update", handleStorageChange);
-    
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("bucketit_storage_update", handleStorageChange);
-    };
-  }, []);
+  const [orders] = useState(sampleOrders);
+  const [selectedOrder, setSelectedOrder] = useState<typeof sampleOrders[0] | null>(null);
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
 
-  const getStatusColor = (status: Order["status"]) => {
-    switch (status) {
-      case "active":
-        return "bg-green-500/10 text-green-500 border-green-500/20";
-      case "completed":
-        return "bg-primary/10 text-primary border-primary/20";
-      case "cancelled":
-        return "bg-destructive/10 text-destructive border-destructive/20";
-      default:
-        return "";
-    }
-  };
-
-  // Format date for display
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-IN', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    }).format(date);
-  };
-  
-  const handleViewOrder = (order: Order) => {
+  const viewOrderDetails = (order: typeof sampleOrders[0]) => {
     setSelectedOrder(order);
-    setViewType("detail");
-  };
-  
-  const handleViewReceipt = (order: Order) => {
-    setSelectedOrder(order);
-    setViewType("receipt");
-  };
-  
-  const handleBack = () => {
-    setViewType("list");
-    setSelectedOrder(null);
   };
 
-  const renderContent = () => {
-    if (viewType === "detail" && selectedOrder) {
-      return (
-        <Card>
-          <CardHeader className="flex flex-row items-center">
-            <Button variant="ghost" size="icon" onClick={handleBack} className="mr-2">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <CardTitle className="text-2xl">Order Details</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <OrderView order={selectedOrder} />
-          </CardContent>
-        </Card>
-      );
-    }
-    
-    if (viewType === "receipt" && selectedOrder) {
-      return (
-        <Card>
-          <CardHeader className="flex flex-row items-center">
-            <Button variant="ghost" size="icon" onClick={handleBack} className="mr-2">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <CardTitle className="text-2xl">Order Receipt</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <OrderReceipt order={selectedOrder} />
-          </CardContent>
-        </Card>
-      );
-    }
-    
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Order History</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {orders.length === 0 ? (
-            <div className="text-center py-8">
-              <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-muted mb-4">
-                <ShoppingCart className="h-6 w-6 text-muted-foreground" />
-              </div>
-              <h3 className="text-lg font-medium">No orders yet</h3>
-              <p className="text-muted-foreground mt-2 mb-4">
-                You haven't placed any orders yet. Browse our products and start renting!
-              </p>
-              <Link to="/products">
-                <Button>
-                  Browse Products
-                </Button>
-              </Link>
-            </div>
-          ) : (
+  const viewReceipt = (order: typeof sampleOrders[0]) => {
+    setSelectedOrder(order);
+    setShowReceiptModal(true);
+  };
+
+  return (
+    <Layout>
+      <div className="container mx-auto py-12 px-4">
+        <h1 className="text-3xl font-bold mb-8">Order History</h1>
+
+        {orders.length > 0 ? (
+          <div className="bg-background rounded-lg border shadow-sm overflow-hidden">
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Order ID</TableHead>
                   <TableHead>Date</TableHead>
-                  <TableHead>Items</TableHead>
                   <TableHead>Total</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
@@ -321,36 +170,30 @@ const OrderHistory = () => {
                     <TableCell className="font-medium">{order.id}</TableCell>
                     <TableCell>{formatDate(order.date)}</TableCell>
                     <TableCell>
-                      <div className="flex -space-x-2">
-                        {order.items.slice(0, 3).map((item) => (
-                          <img
-                            key={item.id}
-                            src={item.image}
-                            alt={item.name}
-                            className="w-10 h-10 rounded-full border-2 border-background object-cover"
-                            title={item.name}
-                          />
-                        ))}
-                        {order.items.length > 3 && (
-                          <span className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-background bg-muted text-xs font-medium">
-                            +{order.items.length - 3}
-                          </span>
-                        )}
+                      <div className="flex items-center">
+                        <IndianRupee className="h-3 w-3 mr-1" />
+                        {order.total.toLocaleString()}
                       </div>
                     </TableCell>
-                    <TableCell>{order.currency || "₹"}{order.total.toFixed(2)}</TableCell>
                     <TableCell>
-                      <Badge className={`${getStatusColor(order.status)} capitalize`}>
-                        {order.status}
-                      </Badge>
+                      <Badge className={getStatusColor(order.status)}>{order.status}</Badge>
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Button variant="outline" size="sm" onClick={() => handleViewOrder(order)}>
-                          <Eye className="h-4 w-4 mr-1" /> View
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => viewOrderDetails(order)}
+                        >
+                          View Details
                         </Button>
-                        <Button variant="outline" size="sm" onClick={() => handleViewReceipt(order)}>
-                          <Download className="h-4 w-4 mr-1" /> Receipt
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => viewReceipt(order)}
+                        >
+                          <FileText className="h-4 w-4 mr-1" />
+                          Receipt
                         </Button>
                       </div>
                     </TableCell>
@@ -358,17 +201,188 @@ const OrderHistory = () => {
                 ))}
               </TableBody>
             </Table>
-          )}
-        </CardContent>
-      </Card>
-    );
-  };
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-muted/30 rounded-lg">
+            <h3 className="text-xl font-medium mb-2">No orders yet</h3>
+            <p className="text-muted-foreground mb-6">
+              You haven't placed any orders yet
+            </p>
+            <Button asChild>
+              <a href="/products">Browse Products</a>
+            </Button>
+          </div>
+        )}
 
-  return (
-    <Layout>
-      <DashboardLayout>
-        {renderContent()}
-      </DashboardLayout>
+        {/* Order Details Modal */}
+        {selectedOrder && (
+          <Dialog open={!!selectedOrder && !showReceiptModal} onOpenChange={(open) => !open && setSelectedOrder(null)}>
+            <DialogContent className="max-w-3xl">
+              <DialogHeader>
+                <DialogTitle>Order Details - {selectedOrder.id}</DialogTitle>
+              </DialogHeader>
+
+              <div className="space-y-6">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Order Date</p>
+                    <p>{formatDate(selectedOrder.date)}</p>
+                  </div>
+                  <Badge className={getStatusColor(selectedOrder.status)}>{selectedOrder.status}</Badge>
+                </div>
+
+                <div className="border rounded-md">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Product</TableHead>
+                        <TableHead>Price</TableHead>
+                        <TableHead>Duration</TableHead>
+                        <TableHead className="text-right">Subtotal</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {selectedOrder.items.map((item) => (
+                        <TableRow key={item.id}>
+                          <TableCell>
+                            <div className="flex items-center gap-3">
+                              <img 
+                                src={item.image} 
+                                alt={item.name} 
+                                className="w-12 h-12 object-cover rounded-md"
+                              />
+                              <div>
+                                <p className="font-medium">{item.name}</p>
+                                <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center">
+                              <IndianRupee className="h-3 w-3 mr-1" />
+                              {item.price.toLocaleString()}
+                            </div>
+                          </TableCell>
+                          <TableCell className="capitalize">{item.duration}</TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex items-center justify-end">
+                              <IndianRupee className="h-3 w-3 mr-1" />
+                              {(item.price * item.quantity).toLocaleString()}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                <div className="flex justify-between border-t pt-4">
+                  <div className="w-1/2">
+                    <h4 className="font-semibold mb-2">Shipping Address</h4>
+                    <p>{selectedOrder.shippingAddress.name}</p>
+                    <p>{selectedOrder.shippingAddress.street}</p>
+                    <p>
+                      {selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state} {selectedOrder.shippingAddress.zip}
+                    </p>
+                    <p>{selectedOrder.shippingAddress.country}</p>
+                  </div>
+                  <div className="w-1/2">
+                    <h4 className="font-semibold mb-2">Payment Information</h4>
+                    <p>Method: {selectedOrder.paymentMethod}</p>
+                    <div className="mt-4">
+                      <div className="flex justify-between">
+                        <span>Subtotal:</span>
+                        <div className="flex items-center">
+                          <IndianRupee className="h-3 w-3 mr-1" />
+                          {selectedOrder.total.toLocaleString()}
+                        </div>
+                      </div>
+                      <div className="flex justify-between font-semibold text-lg mt-2">
+                        <span>Total:</span>
+                        <div className="flex items-center">
+                          <IndianRupee className="h-4 w-4 mr-1" />
+                          {selectedOrder.total.toLocaleString()}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <DialogFooter>
+                <Button variant="outline" onClick={() => viewReceipt(selectedOrder)}>
+                  <FileText className="h-4 w-4 mr-2" />
+                  View Receipt
+                </Button>
+                <Button onClick={() => setSelectedOrder(null)}>Close</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+
+        {/* Receipt Modal */}
+        {selectedOrder && (
+          <Dialog open={showReceiptModal} onOpenChange={(open) => !open && setShowReceiptModal(false)}>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>Receipt - {selectedOrder.id}</DialogTitle>
+              </DialogHeader>
+
+              <div className="space-y-6 bg-white text-black p-6 rounded-md">
+                <div className="text-center border-b pb-4">
+                  <h3 className="text-xl font-bold">BucketIt Rentals</h3>
+                  <p className="text-sm">123 Rental Street, Bangalore, India</p>
+                  <p className="text-sm">contact@bucketit.com | +91 9876543210</p>
+                </div>
+
+                <div className="flex justify-between text-sm">
+                  <div>
+                    <p><strong>Order ID:</strong> {selectedOrder.id}</p>
+                    <p><strong>Date:</strong> {formatDate(selectedOrder.date)}</p>
+                  </div>
+                  <div>
+                    <p><strong>Status:</strong> {selectedOrder.status}</p>
+                  </div>
+                </div>
+
+                <div className="border-t border-b py-4">
+                  <p className="font-semibold mb-2">Items Rented:</p>
+                  {selectedOrder.items.map((item, index) => (
+                    <div key={index} className="flex justify-between text-sm mb-2">
+                      <span>{item.quantity}x {item.name} ({item.duration})</span>
+                      <div className="flex items-center">
+                        <IndianRupee className="h-3 w-3 mr-1" />
+                        {(item.price * item.quantity).toLocaleString()}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex justify-between font-semibold">
+                  <span>Total Amount:</span>
+                  <div className="flex items-center">
+                    <IndianRupee className="h-3 w-3 mr-1" />
+                    {selectedOrder.total.toLocaleString()}
+                  </div>
+                </div>
+
+                <div className="text-sm text-center border-t pt-4">
+                  <p>Thank you for choosing BucketIt Rentals!</p>
+                  <p>For support, contact us at support@bucketit.com</p>
+                  <p>GST: 29AABCU9603R1ZX</p>
+                </div>
+              </div>
+
+              <DialogFooter>
+                <Button variant="outline" className="w-full">
+                  <Download className="h-4 w-4 mr-2" />
+                  Download Receipt
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+      </div>
     </Layout>
   );
 };
