@@ -38,16 +38,53 @@ const SignupForm = () => {
       
       // For demo purposes, always succeed with any valid-looking email
       if (email.includes("@") && password.length >= 6) {
-        // Save user data to localStorage for demonstration purposes
+        // Create new user data
         const userData = {
           fullName,
           email,
           createdAt: new Date().toISOString(),
+          phone: "",
+          address: "",
+          city: "",
+          state: "",
+          zip: ""
         };
+        
+        // Store in users array
+        const existingUsers = JSON.parse(localStorage.getItem("bucketit_users") || "[]");
+        const userExists = existingUsers.some((user: any) => user.email === email);
+        
+        if (userExists) {
+          toast.error("An account with this email already exists");
+          setIsLoading(false);
+          return;
+        }
+        
+        const updatedUsers = [...existingUsers, userData];
+        localStorage.setItem("bucketit_users", JSON.stringify(updatedUsers));
+        
+        // Also set as current user
         localStorage.setItem("bucketit_user", JSON.stringify(userData));
         
+        // Initialize empty cart and wishlist for the user
+        if (!localStorage.getItem("bucketit_cart")) {
+          localStorage.setItem("bucketit_cart", JSON.stringify([]));
+        }
+        
+        if (!localStorage.getItem("bucketit_wishlist")) {
+          localStorage.setItem("bucketit_wishlist", JSON.stringify([]));
+        }
+        
+        // Initialize empty orders array
+        if (!localStorage.getItem("bucketit_orders")) {
+          localStorage.setItem("bucketit_orders", JSON.stringify([]));
+        }
+        
         toast.success("Account created successfully!");
-        navigate("/profile"); // Redirect to profile instead of login
+        navigate("/profile"); // Redirect to profile page
+        
+        // Dispatch storage update event to notify other components
+        window.dispatchEvent(new Event("bucketit_storage_update"));
       } else {
         toast.error("Please use a valid email and a password with at least 6 characters");
       }

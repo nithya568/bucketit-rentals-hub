@@ -1,5 +1,6 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,38 +14,77 @@ import { Camera, Save } from "lucide-react";
 import { toast } from "sonner";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("personal");
   const [isEditing, setIsEditing] = useState(false);
-  
-  const [formData, setFormData] = useState({
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    phone: "(555) 123-4567",
-    address: "123 Main St",
-    city: "San Francisco",
-    state: "CA",
-    zip: "94107",
-    notifications: {
-      email: true,
-      sms: false,
-      app: true
-    }
+  const [userData, setUserData] = useState({
+    fullName: "",
+    email: "",
+    createdAt: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: ""
   });
+  
+  // Load user data on component mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem("bucketit_user");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUserData({
+        fullName: parsedUser.fullName || "",
+        email: parsedUser.email || "",
+        createdAt: parsedUser.createdAt || new Date().toISOString(),
+        phone: parsedUser.phone || "",
+        address: parsedUser.address || "",
+        city: parsedUser.city || "",
+        state: parsedUser.state || "",
+        zip: parsedUser.zip || ""
+      });
+    } else {
+      // Redirect to login if no user is found
+      navigate("/login");
+    }
+  }, [navigate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setUserData({
+      ...userData,
       [name]: value
     });
   };
 
   const handleSaveChanges = () => {
-    // In a real app, this would update user data in the database
+    // Save updated user data to localStorage
+    localStorage.setItem("bucketit_user", JSON.stringify(userData));
+    
+    // Also update the user in the users array
+    const existingUsers = JSON.parse(localStorage.getItem("bucketit_users") || "[]");
+    const updatedUsers = existingUsers.map((user: any) => 
+      user.email === userData.email ? { ...user, ...userData } : user
+    );
+    localStorage.setItem("bucketit_users", JSON.stringify(updatedUsers));
+    
     setIsEditing(false);
     toast.success("Profile updated successfully");
+    
+    // Dispatch storage update event to notify other components
+    window.dispatchEvent(new Event("bucketit_storage_update"));
   };
+
+  // Format the join date
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "N/A";
+    
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long' };
+    return date.toLocaleDateString(undefined, options);
+  };
+
+  const joinDate = formatDate(userData.createdAt);
 
   return (
     <Layout>
@@ -69,10 +109,9 @@ const Profile = () => {
                   <div className="flex items-center gap-4">
                     <div className="relative">
                       <Avatar className="h-24 w-24">
-                        <img
-                          src="https://placehold.co/200x200/2DD4BF/FFFFFF?text=JD"
-                          alt="Profile"
-                        />
+                        <div className="bg-primary text-primary-foreground h-full w-full flex items-center justify-center text-xl font-medium">
+                          {userData.fullName?.charAt(0) || "U"}
+                        </div>
                       </Avatar>
                       <Button
                         size="icon"
@@ -84,10 +123,10 @@ const Profile = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold">
-                        {formData.firstName} {formData.lastName}
+                        {userData.fullName || "User"}
                       </h3>
                       <p className="text-muted-foreground text-sm">
-                        Member since April 2023
+                        Member since {joinDate}
                       </p>
                       <Badge className="mt-2">Premium Member</Badge>
                     </div>
@@ -110,21 +149,11 @@ const Profile = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="firstName">First Name</Label>
+                      <Label htmlFor="fullName">Full Name</Label>
                       <Input 
-                        id="firstName" 
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input 
-                        id="lastName" 
-                        name="lastName"
-                        value={formData.lastName}
+                        id="fullName" 
+                        name="fullName"
+                        value={userData.fullName}
                         onChange={handleInputChange}
                         disabled={!isEditing}
                       />
@@ -135,9 +164,9 @@ const Profile = () => {
                         id="email" 
                         name="email"
                         type="email" 
-                        value={formData.email}
+                        value={userData.email}
                         onChange={handleInputChange}
-                        disabled={!isEditing}
+                        disabled={true} // Email cannot be changed
                       />
                     </div>
                     <div className="space-y-2">
@@ -145,7 +174,7 @@ const Profile = () => {
                       <Input 
                         id="phone" 
                         name="phone"
-                        value={formData.phone}
+                        value={userData.phone}
                         onChange={handleInputChange}
                         disabled={!isEditing}
                       />
@@ -158,7 +187,7 @@ const Profile = () => {
                       <Input 
                         id="address" 
                         name="address"
-                        value={formData.address}
+                        value={userData.address}
                         onChange={handleInputChange}
                         disabled={!isEditing}
                       />
@@ -168,7 +197,7 @@ const Profile = () => {
                       <Input 
                         id="city" 
                         name="city"
-                        value={formData.city}
+                        value={userData.city}
                         onChange={handleInputChange}
                         disabled={!isEditing}
                       />
@@ -179,7 +208,7 @@ const Profile = () => {
                         <Input 
                           id="state" 
                           name="state"
-                          value={formData.state}
+                          value={userData.state}
                           onChange={handleInputChange}
                           disabled={!isEditing}
                         />
@@ -189,7 +218,7 @@ const Profile = () => {
                         <Input 
                           id="zip" 
                           name="zip"
-                          value={formData.zip}
+                          value={userData.zip}
                           onChange={handleInputChange}
                           disabled={!isEditing}
                         />

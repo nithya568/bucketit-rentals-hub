@@ -25,16 +25,22 @@ const LoginForm = () => {
       
       // For demo purposes, always succeed with any valid-looking email
       if (email.includes("@") && password.length >= 6) {
-        // Save user data to localStorage for demonstration purposes
-        const userData = {
-          fullName: "John Doe", // Default name, would typically come from the backend
-          email,
-          createdAt: new Date().toISOString(),
-        };
-        localStorage.setItem("bucketit_user", JSON.stringify(userData));
+        // Try to find an existing user with this email
+        const existingUsers = JSON.parse(localStorage.getItem("bucketit_users") || "[]");
+        const user = existingUsers.find((u: any) => u.email === email);
         
-        toast.success("Login successful!");
-        navigate("/profile"); // Redirect to profile page instead of homepage
+        if (user) {
+          // Save user data to localStorage for the current session
+          localStorage.setItem("bucketit_user", JSON.stringify(user));
+          
+          toast.success("Login successful!");
+          navigate("/profile"); // Redirect to profile page
+          
+          // Dispatch storage update event to notify other components
+          window.dispatchEvent(new Event("bucketit_storage_update"));
+        } else {
+          toast.error("No account found with this email. Please sign up first.");
+        }
       } else {
         toast.error("Invalid email or password");
       }
