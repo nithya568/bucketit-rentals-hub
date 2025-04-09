@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
@@ -127,6 +126,116 @@ const sampleProducts: Product[] = [
     monthlyPrice: 8999,
     available: true
   },
+  {
+    id: 11,
+    name: "High-End Gaming PC",
+    image: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2042&q=80",
+    description: "Powerful gaming PC with RTX 3080, 32GB RAM and fast SSD storage. Perfect for gaming enthusiasts and content creators.",
+    category: "electronics",
+    dailyPrice: 2999,
+    weeklyPrice: 12999,
+    monthlyPrice: 39999,
+    available: true
+  },
+  {
+    id: 12,
+    name: "Professional DJ Equipment",
+    image: "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2067&q=80",
+    description: "Complete DJ setup with controllers, mixers, and speakers. Everything you need for your next event or party.",
+    category: "electronics",
+    dailyPrice: 1899,
+    weeklyPrice: 8499,
+    monthlyPrice: 24999,
+    available: true
+  },
+  {
+    id: 13,
+    name: "Camping Gear Set",
+    image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Complete camping set with tent, sleeping bags, and cooking equipment. Everything you need for your outdoor adventure.",
+    category: "outdoors",
+    dailyPrice: 799,
+    weeklyPrice: 3999,
+    monthlyPrice: 12999,
+    available: true
+  },
+  {
+    id: 14,
+    name: "Mountain Bike",
+    image: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "High-quality mountain bike for trail riding and outdoor adventures. Features a lightweight frame and premium components.",
+    category: "outdoors",
+    dailyPrice: 599,
+    weeklyPrice: 2999,
+    monthlyPrice: 8999,
+    available: true
+  },
+  {
+    id: 15,
+    name: "Digital Piano",
+    image: "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Full-sized digital piano with weighted keys and authentic sound. Perfect for musicians and beginners alike.",
+    category: "instruments",
+    dailyPrice: 899,
+    weeklyPrice: 3999,
+    monthlyPrice: 11999,
+    available: true
+  },
+  {
+    id: 16,
+    name: "Electric Guitar with Amp",
+    image: "https://images.unsplash.com/photo-1525201548942-d8732f6617a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Professional electric guitar with amplifier and accessories. Great for performances and recording sessions.",
+    category: "instruments",
+    dailyPrice: 699,
+    weeklyPrice: 2999,
+    monthlyPrice: 9999,
+    available: true
+  },
+  {
+    id: 17,
+    name: "Professional Drone",
+    image: "https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "High-end drone with 4K camera and advanced flight controls. Perfect for aerial photography and videography.",
+    category: "electronics",
+    dailyPrice: 1299,
+    weeklyPrice: 5999,
+    monthlyPrice: 17999,
+    available: true
+  },
+  {
+    id: 18,
+    name: "Party Sound System",
+    image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    description: "Complete sound system with speakers, subwoofer, and mixer. Perfect for parties and events of all sizes.",
+    category: "electronics",
+    dailyPrice: 999,
+    weeklyPrice: 4999,
+    monthlyPrice: 14999,
+    available: true
+  },
+  {
+    id: 19,
+    name: "Professional Video Camera",
+    image: "https://images.unsplash.com/photo-1589872307379-0ffdf9829123?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
+    description: "High-end video camera for professional filming and content creation. Features 4K recording, stabilization, and premium optics.",
+    category: "electronics",
+    dailyPrice: 1799,
+    weeklyPrice: 7999,
+    monthlyPrice: 24999,
+    available: true
+  },
+  {
+    id: 20,
+    name: "Power Tools Set",
+    image: "https://images.unsplash.com/photo-1581147036324-c71f53e635e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
+    description: "Complete set of power tools including drill, saw, sander and more. Everything you need for home improvement projects.",
+    category: "tools",
+    dailyPrice: 899,
+    weeklyPrice: 3999,
+    monthlyPrice: 12999,
+    available: true
+  }
 ];
 
 const ProductDetail = () => {
@@ -139,18 +248,15 @@ const ProductDetail = () => {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    // Simulate API call to fetch product details
     setLoading(true);
     setTimeout(() => {
       const foundProduct = sampleProducts.find((p) => p.id === Number(id));
       if (foundProduct) {
         setProduct(foundProduct);
         
-        // Check if item is in wishlist
         const wishlist = JSON.parse(localStorage.getItem("bucketit_wishlist") || "[]");
         setIsInWishlist(wishlist.some((item: any) => item.id === foundProduct.id));
       } else {
-        // Product not found - we DON'T redirect anymore
         setNotFound(true);
       }
       setLoading(false);
@@ -160,16 +266,13 @@ const ProductDetail = () => {
   const handleAddToCart = () => {
     if (!product) return;
     
-    // Check if product is available
     if (product.available === false) {
       toast.error(`${product.name} is currently unavailable for rent`);
       return;
     }
     
-    // Get existing cart
     const existingCart = JSON.parse(localStorage.getItem("bucketit_cart") || "[]");
     
-    // Check if item already in cart
     const itemInCart = existingCart.find((item: any) => item.id === product.id);
     
     if (itemInCart) {
@@ -177,14 +280,12 @@ const ProductDetail = () => {
       return;
     }
     
-    // Get price based on rental period
     const price = rentalPeriod === "daily" 
       ? product.dailyPrice 
       : rentalPeriod === "weekly" 
         ? product.weeklyPrice 
         : product.monthlyPrice;
     
-    // Add item to cart
     const newItem = {
       id: product.id,
       name: product.name,
@@ -197,7 +298,6 @@ const ProductDetail = () => {
     const updatedCart = [...existingCart, newItem];
     localStorage.setItem("bucketit_cart", JSON.stringify(updatedCart));
     
-    // Trigger storage update event
     window.dispatchEvent(new Event("bucketit_storage_update"));
     
     toast.success(`Added ${product.name} to your cart`);
@@ -206,17 +306,14 @@ const ProductDetail = () => {
   const toggleWishlist = () => {
     if (!product) return;
     
-    // Get existing wishlist
     const existingWishlist = JSON.parse(localStorage.getItem("bucketit_wishlist") || "[]");
     
     if (isInWishlist) {
-      // Remove from wishlist
       const updatedWishlist = existingWishlist.filter((item: any) => item.id !== product.id);
       localStorage.setItem("bucketit_wishlist", JSON.stringify(updatedWishlist));
       setIsInWishlist(false);
       toast.success(`${product.name} removed from wishlist`);
     } else {
-      // Add to wishlist
       const wishlistItem = {
         ...product,
         addedAt: new Date().toISOString()
@@ -228,7 +325,6 @@ const ProductDetail = () => {
       toast.success(`${product.name} added to wishlist`);
     }
     
-    // Trigger storage update event
     window.dispatchEvent(new Event("bucketit_storage_update"));
   };
 
@@ -284,14 +380,12 @@ const ProductDetail = () => {
     return null;
   }
 
-  // Always set product as available
   const isAvailable = true;
 
   return (
     <Layout>
       <div className="container mx-auto py-12 px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Product Image */}
           <div className="rounded-lg overflow-hidden border bg-white relative">
             <img
               src={product.image}
@@ -311,7 +405,6 @@ const ProductDetail = () => {
             )}
           </div>
 
-          {/* Product Details */}
           <div>
             <div className="mb-4 flex justify-between items-start">
               <div>
@@ -334,7 +427,6 @@ const ProductDetail = () => {
               <p>{product.description}</p>
             </div>
 
-            {/* Rental Options */}
             <div className="border rounded-lg p-6 bg-background mb-8">
               <h3 className="text-lg font-semibold mb-4">Choose Rental Period</h3>
               
