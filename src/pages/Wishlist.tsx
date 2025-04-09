@@ -1,7 +1,7 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Product } from "@/components/products/ProductCard";
 import { Heart, ShoppingCart, Trash } from "lucide-react";
@@ -12,30 +12,22 @@ interface WishlistItem extends Product {
 }
 
 const Wishlist = () => {
-  const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([
-    {
-      id: 2,
-      name: "Sony A7 III Camera",
-      image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Sony+A7+III",
-      description: "Full-frame mirrorless camera with 24.2MP",
-      category: "electronics",
-      dailyPrice: 20,
-      weeklyPrice: 120,
-      monthlyPrice: 399,
-      addedAt: "2023-04-15"
-    },
-    {
-      id: 4,
-      name: "Power Drill Set",
-      image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Power+Drill+Set",
-      description: "Professional 18V cordless drill with accessories",
-      category: "tools",
-      dailyPrice: 7,
-      weeklyPrice: 39,
-      monthlyPrice: 129,
-      addedAt: "2023-04-12"
+  const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
+
+  // Load wishlist items from localStorage on component mount
+  useEffect(() => {
+    const savedWishlist = localStorage.getItem("bucketit_wishlist");
+    if (savedWishlist) {
+      setWishlistItems(JSON.parse(savedWishlist));
     }
-  ]);
+  }, []);
+
+  // Update localStorage whenever wishlist items change
+  useEffect(() => {
+    localStorage.setItem("bucketit_wishlist", JSON.stringify(wishlistItems));
+    // Dispatch custom event to notify other components of the change
+    window.dispatchEvent(new Event("bucketit_storage_update"));
+  }, [wishlistItems]);
 
   const handleRemoveItem = (id: number) => {
     setWishlistItems(wishlistItems.filter(item => item.id !== id));
@@ -43,7 +35,33 @@ const Wishlist = () => {
   };
 
   const handleAddToCart = (item: WishlistItem) => {
-    // In a real app, this would add to cart state or send to API
+    // Get existing cart
+    const existingCart = JSON.parse(localStorage.getItem("bucketit_cart") || "[]");
+    
+    // Check if item already in cart
+    const itemInCart = existingCart.find((cartItem: any) => cartItem.id === item.id);
+    
+    if (itemInCart) {
+      toast.info(`${item.name} is already in your cart`);
+      return;
+    }
+    
+    // Add item to cart
+    const newItem = {
+      id: item.id,
+      name: item.name,
+      image: item.image,
+      price: item.dailyPrice,
+      duration: "daily",
+      quantity: 1
+    };
+    
+    const updatedCart = [...existingCart, newItem];
+    localStorage.setItem("bucketit_cart", JSON.stringify(updatedCart));
+    
+    // Trigger storage update event
+    window.dispatchEvent(new Event("bucketit_storage_update"));
+    
     toast.success(`${item.name} added to cart`);
   };
 

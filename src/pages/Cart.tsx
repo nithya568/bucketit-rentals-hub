@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash, ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 interface CartItem {
   id: number;
@@ -18,33 +19,40 @@ interface CartItem {
 }
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: 1,
-      name: "MacBook Pro 16\" M1 Pro",
-      image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=MacBook+Pro",
-      price: 25,
-      duration: "daily",
-      quantity: 1
-    },
-    {
-      id: 3,
-      name: "Modern Lounge Chair",
-      image: "https://placehold.co/600x400/2DD4BF/FFFFFF?text=Lounge+Chair",
-      price: 45,
-      duration: "weekly",
-      quantity: 1
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  // Load cart items from localStorage on component mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem("bucketit_cart");
+    if (savedCart) {
+      setCartItems(JSON.parse(savedCart));
     }
-  ]);
+  }, []);
+
+  // Update localStorage whenever cart items change
+  useEffect(() => {
+    localStorage.setItem("bucketit_cart", JSON.stringify(cartItems));
+    // Dispatch custom event to notify other components of the change
+    window.dispatchEvent(new Event("bucketit_storage_update"));
+  }, [cartItems]);
 
   const handleRemoveItem = (id: number) => {
     setCartItems(cartItems.filter(item => item.id !== id));
+    toast.success("Item removed from cart");
   };
 
   const handleChangeDuration = (id: number, duration: "daily" | "weekly" | "monthly") => {
     const updatedItems = cartItems.map(item => {
       if (item.id === id) {
-        const price = duration === "daily" ? 25 : duration === "weekly" ? 45 : 150;
+        // Adjust price based on duration
+        let price = item.price;
+        if (duration === "daily") {
+          price = 25; // Sample daily price
+        } else if (duration === "weekly") {
+          price = 45; // Sample weekly price
+        } else {
+          price = 150; // Sample monthly price
+        }
         return { ...item, duration, price };
       }
       return item;

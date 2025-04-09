@@ -38,8 +38,16 @@ const SignupForm = () => {
       
       // For demo purposes, always succeed with any valid-looking email
       if (email.includes("@") && password.length >= 6) {
+        // Save user data to localStorage for demonstration purposes
+        const userData = {
+          fullName,
+          email,
+          createdAt: new Date().toISOString(),
+        };
+        localStorage.setItem("bucketit_user", JSON.stringify(userData));
+        
         toast.success("Account created successfully!");
-        navigate("/login");
+        navigate("/profile"); // Redirect to profile instead of login
       } else {
         toast.error("Please use a valid email and a password with at least 6 characters");
       }
