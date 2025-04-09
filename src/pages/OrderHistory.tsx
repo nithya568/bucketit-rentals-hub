@@ -8,12 +8,12 @@ import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { IndianRupee, Download, FileText } from "lucide-react";
 
-// Helper functions
-const formatDate = (dateString: string) => {
+// Helper functions - moved to the top level and properly exported
+export const formatDate = (dateString: string) => {
   return format(new Date(dateString), "MMM dd, yyyy");
 };
 
-const getStatusColor = (status: string) => {
+export const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
     case "delivered":
       return "bg-green-500 hover:bg-green-600";
