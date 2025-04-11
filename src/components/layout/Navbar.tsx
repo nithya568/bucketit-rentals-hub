@@ -16,6 +16,7 @@ const Navbar = () => {
   const [cartCount, setCartCount] = useState(0);
   const [wishlistCount, setWishlistCount] = useState(0);
 
+  // Load user data on component mount
   useEffect(() => {
     // Check for user data in localStorage
     const storedUser = localStorage.getItem("bucketit_user");
@@ -61,6 +62,11 @@ const Navbar = () => {
     window.dispatchEvent(new Event("bucketit_storage_update"));
     toast.success("You have been logged out successfully");
     navigate("/");
+  };
+
+  const handleProfileClick = () => {
+    navigate('/profile');
+    setIsMenuOpen(false); // Close mobile menu if open
   };
 
   return (
@@ -125,7 +131,11 @@ const Navbar = () => {
               {isLoggedIn ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="flex items-center ml-2 animate-fade-in">
+                    <Button 
+                      variant="outline" 
+                      className="flex items-center ml-2 animate-fade-in cursor-pointer"
+                      onClick={() => {}}
+                    >
                       <Avatar className="h-6 w-6 mr-2">
                         <div className="bg-primary text-primary-foreground h-full w-full flex items-center justify-center text-xs font-medium">
                           {userData?.fullName?.charAt(0) || "U"}
@@ -135,11 +145,9 @@ const Navbar = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="animate-fade-in">
-                    <DropdownMenuItem asChild>
-                      <Link to="/profile" className="w-full cursor-pointer">
-                        <User className="h-4 w-4 mr-2" />
-                        Profile
-                      </Link>
+                    <DropdownMenuItem onClick={handleProfileClick} className="cursor-pointer">
+                      <User className="h-4 w-4 mr-2" />
+                      Profile
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link to="/wishlist" className="w-full cursor-pointer">
@@ -247,12 +255,13 @@ const Navbar = () => {
             
             {isLoggedIn ? (
               <>
-                <Link
-                  to="/profile"
-                  className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary"
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start px-3 py-2 text-base font-medium text-foreground hover:text-primary"
+                  onClick={handleProfileClick}
                 >
                   Profile
-                </Link>
+                </Button>
                 <Link
                   to="/wishlist"
                   className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary"
