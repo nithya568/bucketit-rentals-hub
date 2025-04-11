@@ -1,14 +1,15 @@
-
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, User, ShoppingCart, Search, LogOut, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState<{ fullName?: string; email?: string } | null>(null);
@@ -58,7 +59,8 @@ const Navbar = () => {
     setUserData(null);
     // Dispatch a custom event to notify other components about the change
     window.dispatchEvent(new Event("bucketit_storage_update"));
-    window.location.href = "/";
+    toast.success("You have been logged out successfully");
+    navigate("/");
   };
 
   return (

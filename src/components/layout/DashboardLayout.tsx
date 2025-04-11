@@ -1,6 +1,5 @@
-
 import { ReactNode, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { 
   ShoppingCart, 
   Heart, 
@@ -13,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -20,6 +20,7 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPath = location.pathname;
   const [cartItemCount, setCartItemCount] = useState(0);
   const [wishlistItemCount, setWishlistItemCount] = useState(0);
@@ -53,6 +54,16 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     };
   }, []);
 
+  const handleLogout = () => {
+    // Clear user data
+    localStorage.removeItem("bucketit_user");
+    // Dispatch storage update event to notify other components
+    window.dispatchEvent(new Event("bucketit_storage_update"));
+    toast.success("You have been logged out successfully");
+    // Redirect to home page
+    navigate("/");
+  };
+
   const sidebarItems = [
     { name: "Profile", path: "/profile", icon: User },
     { 
@@ -71,13 +82,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { name: "Payment Methods", path: "/payment", icon: CreditCard },
     { name: "Settings", path: "/settings", icon: Settings },
   ];
-
-  const handleLogout = () => {
-    // Clear user data
-    localStorage.removeItem("bucketit_user");
-    // Redirect to home page
-    window.location.href = "/";
-  };
 
   return (
     <div className="container mx-auto py-6 px-4">
